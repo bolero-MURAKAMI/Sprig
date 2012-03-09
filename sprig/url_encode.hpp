@@ -11,7 +11,9 @@
 #include <boost/range.hpp>
 #include <boost/foreach.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/mpl/or.hpp>
 #include <sprig/type_traits/is_char_type.hpp>
+#include <sprig/type_traits/is_wchar_type.hpp>
 
 namespace sprig {
 	//
@@ -20,7 +22,7 @@ namespace sprig {
 	namespace url_encode_detail {
 		template<typename Char>
 		static bool is_unreserved(Char c) {
-			BOOST_MPL_ASSERT((is_char_type<Char>));
+			BOOST_MPL_ASSERT((boost::mpl::or_<is_char_type<Char>, is_wchar_type<Char> >));
 			return c >= 'a' && c <= 'z'
 				|| c >= 'A' && c <= 'Z'
 				|| c >= '0' && c <= '9'
@@ -32,17 +34,17 @@ namespace sprig {
 		}
 		template<typename Char>
 		static bool is_num(Char c) {
-			BOOST_MPL_ASSERT((is_char_type<Char>));
+			BOOST_MPL_ASSERT((boost::mpl::or_<is_char_type<Char>, is_wchar_type<Char> >));
 			return c >= '0' && c <= '9';
 		}
 		template<typename Char>
 		static bool is_upper(Char c) {
-			BOOST_MPL_ASSERT((is_char_type<Char>));
+			BOOST_MPL_ASSERT((boost::mpl::or_<is_char_type<Char>, is_wchar_type<Char> >));
 			return c >= 'A' && c <= 'F';
 		}
 		template<typename Char>
 		static bool is_lower(Char c) {
-			BOOST_MPL_ASSERT((is_char_type<Char>));
+			BOOST_MPL_ASSERT((boost::mpl::or_<is_char_type<Char>, is_wchar_type<Char> >));
 			return c >= 'a' && c <= 'f';
 		}
 	}	// namespace url_encode_detail
@@ -77,7 +79,7 @@ namespace sprig {
 			return array[c & 0x0F];
 		}
 	private:
-		BOOST_MPL_ASSERT((is_char_type<char_type>));
+		BOOST_MPL_ASSERT((boost::mpl::or_<is_char_type<char_type>, is_wchar_type<char_type> >));
 	};
 	template<typename Char>
 	typename url_encode_table<Char>::array_type const url_encode_table<Char>::array = {
@@ -154,7 +156,7 @@ namespace sprig {
 				;
 		}
 	private:
-		BOOST_MPL_ASSERT((is_char_type<char_type>));
+		BOOST_MPL_ASSERT((boost::mpl::or_<is_char_type<char_type>, is_wchar_type<char_type> >));
 	};
 	//
 	// url_encode_options
