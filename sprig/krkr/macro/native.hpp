@@ -21,15 +21,39 @@
 // COMMENT: 例外を吉里吉里に通知する為のブロックマクロ
 //
 //
-// SPRIG_KRKR_~_NATIVE
+// SPRIG_KRKR_TRY
+// SPRIG_KRKR_CATCH[_RETURN[_VOID]]
+//
+#define SPRIG_KRKR_TRY() \
+	try
+#define SPRIG_KRKR_CATCH(E) \
+	catch (std::exception const& E)
+#define SPRIG_KRKR_RETHROW_TJS_EXCEPTION(E) \
+	{ \
+		sprig::krkr::tjs::rethrow_exception_to_tjs_exception((E)); \
+	}
+#define SPRIG_KRKR_CATCH_RETURN(RET_VALUE) \
+	SPRIG_KRKR_CATCH(e) { \
+		SPRIG_KRKR_RETHROW_TJS_EXCEPTION(e); \
+		return (RET_VALUE); \
+	}
+#define SPRIG_KRKR_CATCH_RETURN_VOID() \
+	SPRIG_KRKR_CATCH(e) { \
+		SPRIG_KRKR_RETHROW_TJS_EXCEPTION(e); \
+		return; \
+	}
+
+//
+// COMMENT: ネイティブメソッド定義用のブロックマクロ
+//
+//
+// SPRIG_KRKR_BEGIN_NATIVE
+// SPRIG_KRKR_END_NATIVE
 //
 #define SPRIG_KRKR_BEGIN_NATIVE() \
-		try {
+	SPRIG_KRKR_TRY() {
 #define SPRIG_KRKR_END_NATIVE() \
-		} catch (std::exception const& e) { \
-			sprig::krkr::tjs::rethrow_exception_to_tjs_exception(e); \
-			return TJS_S_OK; \
-		}
+	} SPRIG_KRKR_CATCH_RETURN(TJS_S_OK)
 
 //
 // COMMENT: ネイティブクラス定義用のブロックマクロ
