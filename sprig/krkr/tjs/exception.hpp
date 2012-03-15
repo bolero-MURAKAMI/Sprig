@@ -9,18 +9,27 @@
 
 #include <boost/exception/diagnostic_information.hpp>
 #include <sprig/external/tp_stub.hpp>
+#include <sprig/str_cast.hpp>
+#include <sprig/krkr/tjs/typedef.hpp>
 
 namespace sprig {
 	namespace krkr {
 		namespace tjs {
 			//
+			// exception_information
+			//
+			template<typename Exception>
+			SPRIG_INLINE sprig::krkr::tjs::string_type exception_information(Exception const& e) {
+				return sprig::str_cast<sprig::krkr::tjs::string_type>(boost::diagnostic_information(e));
+			}
+			//
 			// rethrow_exception_to_tjs_exception
 			//
 			// COMMENT: キャッチした例外をTJSの例外メッセージに変換する。
 			//
-			template<typename T>
-			SPRIG_INLINE void rethrow_exception_to_tjs_exception(T const& e) {
-				::TVPThrowExceptionMessage(sprig::str_cast<string_type>(boost::diagnostic_information(e)).c_str());
+			template<typename Exception>
+			SPRIG_INLINE void rethrow_exception_to_tjs_exception(Exception const& e) {
+				::TVPThrowExceptionMessage(sprig::krkr::tjs::exception_information(e).c_str());
 			}
 		}	// namespace tjs
 	}	// namespace krkr
