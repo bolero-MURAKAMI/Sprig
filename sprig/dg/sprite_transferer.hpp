@@ -152,19 +152,19 @@ namespace sprig {
 				return sprite_drawer_manager_.end();
 			}
 			template<typename Tag>
-			typename typename priority_map_type::index<Tag>::type::const_iterator begin() const {
+			typename typename priority_map_type::template index<Tag>::type::const_iterator begin() const {
 				return sprite_drawer_manager_.begin<Tag>();
 			}
 			template<typename Tag>
-			typename typename priority_map_type::index<Tag>::type::iterator begin() {
+			typename typename priority_map_type::template index<Tag>::type::iterator begin() {
 				return sprite_drawer_manager_.begin<Tag>();
 			}
 			template<typename Tag>
-			typename typename priority_map_type::index<Tag>::type::const_iterator end() const {
+			typename typename priority_map_type::template index<Tag>::type::const_iterator end() const {
 				return sprite_drawer_manager_.end<Tag>();
 			}
 			template<typename Tag>
-			typename typename priority_map_type::index<Tag>::type::iterator end() {
+			typename typename priority_map_type::template index<Tag>::type::iterator end() {
 				return sprite_drawer_manager_.end<Tag>();
 			}
 			typename priority_map_type::const_iterator find(typename sprig::call_traits<key_type>::param_type key) const {

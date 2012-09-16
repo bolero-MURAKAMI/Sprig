@@ -45,8 +45,8 @@ namespace sprig {
 			typedef typename priority_map_defs_type::key_tag_type key_tag_type;
 			typedef typename priority_map_defs_type::priority_tag_type priority_tag_type;
 			typedef typename priority_map_defs_type::type priority_map_type;
-			typedef typename priority_map_type::index<typename priority_map_defs_type::key_tag_type>::type key_index_type;
-			typedef typename priority_map_type::index<typename priority_map_defs_type::priority_tag_type>::type priority_index_type;
+			typedef typename priority_map_type::template index<typename priority_map_defs_type::key_tag_type>::type key_index_type;
+			typedef typename priority_map_type::template index<typename priority_map_defs_type::priority_tag_type>::type priority_index_type;
 			typedef std::pair<typename priority_map_type::iterator, bool> insert_result_type;
 		private:
 			priority_map_type priority_map_;
@@ -128,19 +128,19 @@ namespace sprig {
 				return priority_map_.end();
 			}
 			template<typename Tag>
-			typename typename priority_map_type::index<Tag>::type::const_iterator begin() const {
+			typename typename priority_map_type::template index<Tag>::type::const_iterator begin() const {
 				return priority_map_.get<Tag>().begin();
 			}
 			template<typename Tag>
-			typename typename priority_map_type::index<Tag>::type::iterator begin() {
+			typename typename priority_map_type::template index<Tag>::type::iterator begin() {
 				return priority_map_.get<Tag>().begin();
 			}
 			template<typename Tag>
-			typename typename priority_map_type::index<Tag>::type::const_iterator end() const {
+			typename typename priority_map_type::template index<Tag>::type::const_iterator end() const {
 				return priority_map_.get<Tag>().end();
 			}
 			template<typename Tag>
-			typename typename priority_map_type::index<Tag>::type::iterator end() {
+			typename typename priority_map_type::template index<Tag>::type::iterator end() {
 				return priority_map_.get<Tag>().end();
 			}
 			typename priority_map_type::const_iterator find(typename sprig::call_traits<key_type>::param_type key) const {

@@ -81,7 +81,7 @@ namespace sprig {
 			}
 		};
 
-	 	//
+		//
 		// def_overflow_handler
 		//
 		struct def_overflow_handler {
@@ -100,7 +100,7 @@ namespace sprig {
 				}
 			}
 		};
-	 	//
+		//
 		// positive_silent_overflow_handler
 		//
 		struct positive_silent_overflow_handler {
@@ -116,7 +116,7 @@ namespace sprig {
 				}
 			}
 		};
-	 	//
+		//
 		// silent_overflow_handler
 		//
 		struct silent_overflow_handler {

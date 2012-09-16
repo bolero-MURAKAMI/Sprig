@@ -192,21 +192,7 @@ namespace sprig {
 			: value_(source)
 		{}
 		template<typename T>
-		big_int(
-			T const source,
-			typename boost::enable_if<
-				is_call_copy_param<T>
-			>::type* = 0
-			)
-			: value_(to_ZZ(source))
-		{}
-		template<typename T>
-		big_int(
-			T const& source,
-			typename boost::enable_if<
-				boost::mpl::not_<is_call_copy_param<T> >
-			>::type* = 0
-			)
+		big_int(T const& source)
 			: value_(to_ZZ(source))
 		{}
 		//
@@ -335,7 +321,7 @@ namespace sprig {
 			return value_;
 		}
 		//
-		//	COMMENT: Žæ“¾‰‰ŽZŽq
+		//	COMMENT: Žæ“¾
 		//
 		internal_type const& get() const {
 			return value_;
