@@ -1,5 +1,5 @@
-#ifndef SPRIG_KRKR_TJS_AS_C_STR_HPP
-#define SPRIG_KRKR_TJS_AS_C_STR_HPP
+#ifndef SPRIG_KRKR_TJS_OCTET_LENGTH_HPP
+#define SPRIG_KRKR_TJS_OCTET_LENGTH_HPP
 
 #include <sprig/config/config.hpp>
 
@@ -14,13 +14,12 @@ namespace sprig {
 	namespace krkr {
 		namespace tjs {
 			//
-			// as_c_str
+			// octet_length
 			//
 			namespace {
-				SPRIG_INLINE tjs_char const* as_c_str(tTJSVariantString const* source) {
-					tjs_char const* src = source->operator tjs_char const*();
-					return src ? src
-						: SPRIG_KRKR_TJS_W("")
+				SPRIG_INLINE tjs_uint octet_length(tTJSVariantOctet const* source) {
+					return source ? source->GetLength()
+						: 0
 						;
 				}
 			}	// anonymous-namespace
@@ -28,4 +27,4 @@ namespace sprig {
 	}	// namespace krkr
 }	// namespace sprig
 
-#endif	// #ifndef SPRIG_KRKR_TJS_AS_C_STR_HPP
+#endif	// #ifndef SPRIG_KRKR_TJS_OCTET_LENGTH_HPP
