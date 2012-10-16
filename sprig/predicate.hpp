@@ -77,19 +77,17 @@ namespace sprig {
 		//
 		// lexicographical_compare
 		//
-		namespace {
-			lexicographical_compare_t<> lexicographical_compare() {
-				return lexicographical_compare_t<>();
-			}
-			template<typename Predicate>
-			lexicographical_compare_t<Predicate> lexicographical_compare() {
-				return lexicographical_compare_t<Predicate>();
-			}
-			template<typename Predicate>
-			lexicographical_compare_t<Predicate> lexicographical_compare(Predicate pred) {
-				return lexicographical_compare_t<Predicate>(pred);
-			}
-		}	// anonymous-namespace
+		SPRIG_INLINE sprig::predicate::lexicographical_compare_t<> lexicographical_compare() {
+			return lexicographical_compare_t<>();
+		}
+		template<typename Predicate>
+		SPRIG_INLINE sprig::predicate::lexicographical_compare_t<Predicate> lexicographical_compare() {
+			return lexicographical_compare_t<Predicate>();
+		}
+		template<typename Predicate>
+		SPRIG_INLINE sprig::predicate::lexicographical_compare_t<Predicate> lexicographical_compare(Predicate pred) {
+			return lexicographical_compare_t<Predicate>(pred);
+		}
 	}	// namespace predicate
 }	// namespace sprig
 

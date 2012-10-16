@@ -125,16 +125,14 @@ namespace sprig {
 			::png_read_image(png, &lines[0]);
 		}
 
-		namespace {
-			//
-			// png_read_buffer_fn
-			//
-			SPRIG_INLINE void png_read_buffer_fn(png_structp png, png_bytep buf, png_size_t size){
-				png_byte const** p = reinterpret_cast<png_byte const**>(::png_get_io_ptr(png));
-				std::memcpy(buf, *p, size);
-				*p += size;
-			}
-		}	// anonymous-namespace
+		//
+		// png_read_buffer_fn
+		//
+		SPRIG_INLINE void png_read_buffer_fn(png_structp png, png_bytep buf, png_size_t size){
+			png_byte const** p = reinterpret_cast<png_byte const**>(::png_get_io_ptr(png));
+			std::memcpy(buf, *p, size);
+			*p += size;
+		}
 		//
 		// png_read_buffer_functors
 		//

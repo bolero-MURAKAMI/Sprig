@@ -16,14 +16,12 @@ namespace sprig {
 			//
 			// as_c_str
 			//
-			namespace {
-				SPRIG_INLINE tjs_char const* as_c_str(tTJSVariantString const* source) {
-					tjs_char const* src = source->operator tjs_char const*();
-					return src ? src
-						: SPRIG_KRKR_TJS_W("")
-						;
-				}
-			}	// anonymous-namespace
+			SPRIG_INLINE tjs_char const* as_c_str(tTJSVariantString const* source) {
+				tjs_char const* src = source->operator tjs_char const*();
+				return src ? src
+					: SPRIG_KRKR_TJS_W("")
+					;
+			}
 		}	// namespace tjs
 	}	// namespace krkr
 }	// namespace sprig

@@ -1341,14 +1341,12 @@ namespace sprig {
 				return input_;
 			}
 		};
-		namespace {
-			//
-			// swap
-			//
-			SPRIG_INLINE void swap(engine& lhs, engine& rhs) {
-				lhs.swap(rhs);
-			}
-		}	// anonymous-namespace
+		//
+		// swap
+		//
+		SPRIG_INLINE void swap(engine& lhs, engine& rhs) {
+			lhs.swap(rhs);
+		}
 	}	// namespace braincunt
 }	// namespace sprig
 

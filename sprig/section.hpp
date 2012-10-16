@@ -57,20 +57,18 @@ namespace sprig {
 	// section_begin
 	// wsection_begin
 	//
-	namespace {
-		SPRIG_INLINE std::string section_begin(string_argument const& name) {
-			return basic_section_begin<std::string>(name);
-		}
-		SPRIG_INLINE std::string section_begin(string_argument const& name, attributes const& attr) {
-			return basic_section_begin<std::string>(name, attr);
-		}
-		SPRIG_INLINE std::wstring wsection_begin(wstring_argument const& name) {
-			return basic_section_begin<std::wstring>(name);
-		}
-		SPRIG_INLINE std::wstring wsection_begin(wstring_argument const& name, wattributes const& attr) {
-			return basic_section_begin<std::wstring>(name, attr);
-		}
-	}	// anonymous-namespace
+	SPRIG_INLINE std::string section_begin(string_argument const& name) {
+		return basic_section_begin<std::string>(name);
+	}
+	SPRIG_INLINE std::string section_begin(string_argument const& name, attributes const& attr) {
+		return basic_section_begin<std::string>(name, attr);
+	}
+	SPRIG_INLINE std::wstring wsection_begin(wstring_argument const& name) {
+		return basic_section_begin<std::wstring>(name);
+	}
+	SPRIG_INLINE std::wstring wsection_begin(wstring_argument const& name, wattributes const& attr) {
+		return basic_section_begin<std::wstring>(name, attr);
+	}
 
 	namespace section_detail {
 		SPRIG_SPLIT_LITERAL_STRING_DECL(lt_slash, "</");
@@ -97,14 +95,12 @@ namespace sprig {
 	// section_end
 	// wsection_end
 	//
-	namespace {
-		SPRIG_INLINE std::string section_end(string_argument const& name) {
-			return basic_section_end<std::string>(name);
-		}
-		SPRIG_INLINE std::wstring wsection_end(wstring_argument const& name) {
-			return basic_section_end<std::wstring>(name);
-		}
-	}	// anonymous-namespace
+	SPRIG_INLINE std::string section_end(string_argument const& name) {
+		return basic_section_end<std::string>(name);
+	}
+	SPRIG_INLINE std::wstring wsection_end(wstring_argument const& name) {
+		return basic_section_end<std::wstring>(name);
+	}
 
 	namespace section_detail {
 		SPRIG_SPLIT_LITERAL_STRING_DECL(slash_gt, " />");
@@ -147,20 +143,18 @@ namespace sprig {
 	// section_empty
 	// wsection_empty
 	//
-	namespace {
-		SPRIG_INLINE std::string section_empty(string_argument const& name) {
-			return basic_section_empty<std::string>(name);
-		}
-		SPRIG_INLINE std::string section_empty(string_argument const& name, attributes const& attr) {
-			return basic_section_empty<std::string>(name, attr);
-		}
-		SPRIG_INLINE std::wstring wsection_empty(wstring_argument const& name) {
-			return basic_section_empty<std::wstring>(name);
-		}
-		SPRIG_INLINE std::wstring wsection_empty(wstring_argument const& name, wattributes const& attr) {
-			return basic_section_empty<std::wstring>(name, attr);
-		}
-	}	// anonymous-namespace
+	SPRIG_INLINE std::string section_empty(string_argument const& name) {
+		return basic_section_empty<std::string>(name);
+	}
+	SPRIG_INLINE std::string section_empty(string_argument const& name, attributes const& attr) {
+		return basic_section_empty<std::string>(name, attr);
+	}
+	SPRIG_INLINE std::wstring wsection_empty(wstring_argument const& name) {
+		return basic_section_empty<std::wstring>(name);
+	}
+	SPRIG_INLINE std::wstring wsection_empty(wstring_argument const& name, wattributes const& attr) {
+		return basic_section_empty<std::wstring>(name, attr);
+	}
 
 	//
 	// basic_section_line
@@ -186,38 +180,36 @@ namespace sprig {
 	// section_line
 	// wsection_line
 	//
-	namespace {
-		SPRIG_INLINE std::string section_line(
-			string_argument const& name,
-			string_argument const& contents
-			)
-		{
-			return basic_section_line<std::string>(name, contents);
-		}
-		SPRIG_INLINE std::string section_line(
-			string_argument const& name,
-			string_argument const& contents,
-			attributes const& attr
-			)
-		{
-			return basic_section_line<std::string>(name, contents, attr);
-		}
-		SPRIG_INLINE std::wstring wsection_line(
-			wstring_argument const& name,
-			wstring_argument const& contents
-			)
-		{
-			return basic_section_line<std::wstring>(name, contents);
-		}
-		SPRIG_INLINE std::wstring wsection_line(
-			wstring_argument const& name,
-			wstring_argument const& contents,
-			wattributes const& attr
-			)
-		{
-			return basic_section_line<std::wstring>(name, contents, attr);
-		}
-	}	// anonymous-namespace
+	SPRIG_INLINE std::string section_line(
+		string_argument const& name,
+		string_argument const& contents
+		)
+	{
+		return basic_section_line<std::string>(name, contents);
+	}
+	SPRIG_INLINE std::string section_line(
+		string_argument const& name,
+		string_argument const& contents,
+		attributes const& attr
+		)
+	{
+		return basic_section_line<std::string>(name, contents, attr);
+	}
+	SPRIG_INLINE std::wstring wsection_line(
+		wstring_argument const& name,
+		wstring_argument const& contents
+		)
+	{
+		return basic_section_line<std::wstring>(name, contents);
+	}
+	SPRIG_INLINE std::wstring wsection_line(
+		wstring_argument const& name,
+		wstring_argument const& contents,
+		wattributes const& attr
+		)
+	{
+		return basic_section_line<std::wstring>(name, contents, attr);
+	}
 
 	namespace section_detail {
 		SPRIG_SPLIT_LITERAL_STRING_DECL(comm_begin, "<!-- ");
@@ -235,14 +227,13 @@ namespace sprig {
 	// section_comment_begin
 	// wsection_comment_begin
 	//
-	namespace {
-		SPRIG_INLINE std::string section_comment_begin() {
-			return basic_section_comment_begin<std::string>();
-		}
-		SPRIG_INLINE std::wstring wsection_comment_begin() {
-			return basic_section_comment_begin<std::wstring>();
-		}
-	}	// anonymous-namespace
+	SPRIG_INLINE std::string section_comment_begin() {
+		return basic_section_comment_begin<std::string>();
+	}
+	SPRIG_INLINE std::wstring wsection_comment_begin() {
+		return basic_section_comment_begin<std::wstring>();
+	}
+
 	//
 	// basic_section_comment_end
 	//
@@ -255,14 +246,13 @@ namespace sprig {
 	// section_comment_end
 	// wsection_comment_end
 	//
-	namespace {
-		SPRIG_INLINE std::string section_comment_end() {
-			return basic_section_comment_end<std::string>();
-		}
-		SPRIG_INLINE std::wstring wsection_comment_end() {
-			return basic_section_comment_end<std::wstring>();
-		}
-	}	// anonymous-namespace
+	SPRIG_INLINE std::string section_comment_end() {
+		return basic_section_comment_end<std::string>();
+	}
+	SPRIG_INLINE std::wstring wsection_comment_end() {
+		return basic_section_comment_end<std::wstring>();
+	}
+
 	//
 	// basic_section_comment
 	//
@@ -285,14 +275,12 @@ namespace sprig {
 	// section_comment
 	// wsection_comment
 	//
-	namespace {
-		SPRIG_INLINE std::string section_comment(string_argument const& comment) {
-			return basic_section_comment<std::string>(comment);
-		}
-		SPRIG_INLINE std::wstring wsection_comment(wstring_argument const& comment) {
-			return basic_section_comment<std::wstring>(comment);
-		}
-	}	// anonymous-namespace
+	SPRIG_INLINE std::string section_comment(string_argument const& comment) {
+		return basic_section_comment<std::string>(comment);
+	}
+	SPRIG_INLINE std::wstring wsection_comment(wstring_argument const& comment) {
+		return basic_section_comment<std::wstring>(comment);
+	}
 } // namespace sprig
 
 #endif	// #ifndef SPRIG_SECTION_HPP

@@ -58,32 +58,31 @@ namespace sprig {
 				}
 			};
 
-			namespace {
-				//
-				// indent_logger
-				//
-				SPRIG_INLINE indent_logger_type& indent_logger() {
-					return indent_logger_proxy::get_mutable_instance().get();
-				}
-				//
-				// output
-				//
-				SPRIG_INLINE void output(string_argument_type const& message) {
-					sprig::logger_output_line(message, indent_logger());
-				}
-				//
-				// output_value
-				//
-				SPRIG_INLINE void output_value(string_argument_type const& name, string_argument_type const& contents) {
-					sprig::logger_section_line(name, contents, indent_logger());
-				}
-				//
-				// output_comment
-				//
-				SPRIG_INLINE void output_comment(string_argument_type const& comment) {
-					sprig::logger_section_comment(comment, indent_logger());
-				}
-			}	// anonymous-namespace
+			//
+			// indent_logger
+			//
+			SPRIG_INLINE indent_logger_type& indent_logger() {
+				return indent_logger_proxy::get_mutable_instance().get();
+			}
+			//
+			// output
+			//
+			SPRIG_INLINE void output(string_argument_type const& message) {
+				sprig::logger_output_line(message, indent_logger());
+			}
+			//
+			// output_value
+			//
+			SPRIG_INLINE void output_value(string_argument_type const& name, string_argument_type const& contents) {
+				sprig::logger_section_line(name, contents, indent_logger());
+			}
+			//
+			// output_comment
+			//
+			SPRIG_INLINE void output_comment(string_argument_type const& comment) {
+				sprig::logger_section_comment(comment, indent_logger());
+			}
+
 			//
 			// section
 			//

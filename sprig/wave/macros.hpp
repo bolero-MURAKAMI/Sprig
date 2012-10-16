@@ -49,14 +49,12 @@
 
 namespace sprig {
 	namespace wave {
-		namespace {
-			//
-			// macros
-			//
-			char const* macros() {
-				return SPRIG_WAVE_MACROS();
-			}
-		}	// anonymous-namespace
+		//
+		// macros
+		//
+		SPRIG_INLINE char const* macros() {
+			return SPRIG_WAVE_MACROS();
+		}
 	}	// namespace wave
 }	// namespace sprig
 

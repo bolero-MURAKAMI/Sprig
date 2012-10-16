@@ -114,32 +114,30 @@ namespace sprig {
 			}
 		};
 
-		namespace {
-			//
-			// indent_logger
-			//
-			SPRIG_INLINE indent_logger_type& indent_logger() {
-				return indent_logger_proxy::get_mutable_instance().get();
-			}
-			//
-			// output
-			//
-			SPRIG_INLINE void output(string_argument_type const& message) {
-				sprig::logger_output_line(message, indent_logger());
-			}
-			//
-			// output_value
-			//
-			SPRIG_INLINE void output_value(string_argument_type const& name, string_argument_type const& contents) {
-				sprig::logger_section_line(name, contents, indent_logger());
-			}
-			//
-			// output_comment
-			//
-			SPRIG_INLINE void output_comment(string_argument_type const& comment) {
-				sprig::logger_section_comment(comment, indent_logger());
-			}
-		}	// anonymous-namespace
+		//
+		// indent_logger
+		//
+		SPRIG_INLINE indent_logger_type& indent_logger() {
+			return indent_logger_proxy::get_mutable_instance().get();
+		}
+		//
+		// output
+		//
+		SPRIG_INLINE void output(string_argument_type const& message) {
+			sprig::logger_output_line(message, indent_logger());
+		}
+		//
+		// output_value
+		//
+		SPRIG_INLINE void output_value(string_argument_type const& name, string_argument_type const& contents) {
+			sprig::logger_section_line(name, contents, indent_logger());
+		}
+		//
+		// output_comment
+		//
+		SPRIG_INLINE void output_comment(string_argument_type const& comment) {
+			sprig::logger_section_comment(comment, indent_logger());
+		}
 
 		//
 		// section
@@ -214,418 +212,417 @@ namespace sprig {
 		struct local_logger_tag {};
 		typedef sprig::local_logger<string_type, local_logger_tag> local_logger_type;
 
-		namespace {
-			//
-			// output_device_caps
-			//
-			HRESULT output_device_caps(sprig::call_traits<device_type>::param_type device) {
-				HRESULT result = D3D_OK;
+		//
+		// output_device_caps
+		//
+		HRESULT output_device_caps(sprig::call_traits<device_type>::param_type device) {
+			HRESULT result = D3D_OK;
 
-				D3DCAPS9 caps;
-				if (FAILED(result = device->GetDeviceCaps(&caps))) {
-					SPRIG_DG_ERROR("レンダリングデバイスの能力取得に失敗しました", bad_process);
-					return result;
-				}
-
-				switch (caps.DeviceType) {
-				case D3DDEVTYPE_HAL:
-					SPRIG_DG_OUTPUT_VALUE(TEXT("DeviceType"), TEXT("D3DDEVTYPE_HAL"));
-					break;
-				case D3DDEVTYPE_NULLREF:
-					SPRIG_DG_OUTPUT_VALUE(TEXT("DeviceType"), TEXT("D3DDEVTYPE_NULLREF"));
-					break;
-				case D3DDEVTYPE_REF:
-					SPRIG_DG_OUTPUT_VALUE(TEXT("DeviceType"), TEXT("D3DDEVTYPE_REF"));
-					break;
-				case D3DDEVTYPE_SW:
-					SPRIG_DG_OUTPUT_VALUE(TEXT("DeviceType"), TEXT("D3DDEVTYPE_SW"));
-					break;
-				}
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスの種類を表します。"));
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("D3DDEVTYPE_HAL でない場合、ハードウェアによるラスタ化が行われずボトルネックになる可能性があります。"));
-
-				SPRIG_DG_OUTPUT_VALUE(TEXT("D3DCAPS3_COPY_TO_SYSTEMMEM"), (caps.Caps3 & D3DCAPS3_COPY_TO_SYSTEMMEM) != 0);
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスがローカルビデオメモリからシステムメモリへのメモリコピーを高速化できるかを表します。"));
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("偽の場合、高速化できずボトルネックになる可能性があります。"));
-
-				SPRIG_DG_OUTPUT_VALUE(TEXT("D3DPTEXTURECAPS_ALPHA"), (caps.TextureCaps & D3DPTEXTURECAPS_ALPHA) != 0);
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスがテクスチャピクセルでのアルファをサポートするかを表します。"));
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("偽の場合、アルファ処理が正常に行われない可能性があります。"));
-
-				SPRIG_DG_OUTPUT_VALUE(TEXT("D3DPMISCCAPS_SEPARATEALPHABLEND"), (caps.PrimitiveMiscCaps & D3DPMISCCAPS_SEPARATEALPHABLEND) != 0);
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスがアルファチャンネルに対する個別のブレンド設定をサポートするかを表します。"));
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("偽の場合、描画結果のアルファチャンネルが正常にならない可能性があります。"));
-
-				SPRIG_DG_OUTPUT_VALUE(TEXT("D3DPMISCCAPS_BLENDOP"), (caps.PrimitiveMiscCaps & D3DPMISCCAPS_BLENDOP) != 0);
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスが D3DBLENDOP_ADD 以外のアルファブレンディング処理をサポートするかを表します。"));
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("偽の場合、一部の描画処理が正常に行われない可能性があります。"));
-
-				SPRIG_DG_OUTPUT_VALUE(TEXT("MaxTextureWidth"), caps.MaxTextureWidth);
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスが作成可能なテクスチャの最大幅です。"));
-
-				SPRIG_DG_OUTPUT_VALUE(TEXT("MaxTextureHeight"), caps.MaxTextureHeight);
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスが作成可能なテクスチャの最大高さです。"));
-
-				SPRIG_DG_OUTPUT_COMMENT(TEXT("レンダリングデバイスの能力を出力します。"));
-				{
-					// DeviceType
-					SPRIG_DG_SECTION(TEXT("DeviceType"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.DeviceType);
-					switch (caps.DeviceType) {
-					case D3DDEVTYPE_HAL:
-						SPRIG_DG_OUTPUT_VALUE(TEXT("enum"), TEXT("D3DDEVTYPE_HAL"));
-						break;
-					case D3DDEVTYPE_NULLREF:
-						SPRIG_DG_OUTPUT_VALUE(TEXT("enum"), TEXT("D3DDEVTYPE_NULLREF"));
-						break;
-					case D3DDEVTYPE_REF:
-						SPRIG_DG_OUTPUT_VALUE(TEXT("enum"), TEXT("D3DDEVTYPE_REF"));
-						break;
-					case D3DDEVTYPE_SW:
-						SPRIG_DG_OUTPUT_VALUE(TEXT("enum"), TEXT("D3DDEVTYPE_SW"));
-						break;
-					}
-				}
-				{
-					// AdapterOrdinal
-					SPRIG_DG_SECTION(TEXT("AdapterOrdinal"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.AdapterOrdinal);
-				}
-				{
-					// Caps
-					SPRIG_DG_SECTION(TEXT("Caps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.Caps);
-					SPRIG_DG_OUTPUT_VALUE(TEXT("D3DCAPS_READ_SCANLINE"), caps.Caps & D3DCAPS_READ_SCANLINE);
-				}
-				{
-					// Caps2
-					SPRIG_DG_SECTION(TEXT("Caps2"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.Caps2);
-				}
-				{
-					// Caps3
-					SPRIG_DG_SECTION(TEXT("Caps3"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.Caps3);
-				}
-				{
-					// PresentationIntervals
-					SPRIG_DG_SECTION(TEXT("PresentationIntervals"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.PresentationIntervals);
-				}
-				{
-					// CursorCaps
-					SPRIG_DG_SECTION(TEXT("CursorCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.CursorCaps);
-				}
-				{
-					// DevCaps
-					SPRIG_DG_SECTION(TEXT("DevCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.DevCaps);
-				}
-				{
-					// PrimitiveMiscCaps
-					SPRIG_DG_SECTION(TEXT("PrimitiveMiscCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.PrimitiveMiscCaps);
-				}
-				{
-					// RasterCaps
-					SPRIG_DG_SECTION(TEXT("RasterCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.RasterCaps);
-				}
-				{
-					// ZCmpCaps
-					SPRIG_DG_SECTION(TEXT("ZCmpCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.ZCmpCaps);
-				}
-				{
-					// SrcBlendCaps
-					SPRIG_DG_SECTION(TEXT("SrcBlendCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.SrcBlendCaps);
-				}
-				{
-					// ZCmpCaps
-					SPRIG_DG_SECTION(TEXT("ZCmpCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.ZCmpCaps);
-				}
-				{
-					// DestBlendCaps
-					SPRIG_DG_SECTION(TEXT("DestBlendCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.DestBlendCaps);
-				}
-				{
-					// AlphaCmpCaps
-					SPRIG_DG_SECTION(TEXT("AlphaCmpCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.AlphaCmpCaps);
-				}
-				{
-					// ShadeCaps
-					SPRIG_DG_SECTION(TEXT("ShadeCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.ShadeCaps);
-				}
-				{
-					// ZCmpCaps
-					SPRIG_DG_SECTION(TEXT("TextureCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.TextureCaps);
-				}
-				{
-					// TextureFilterCaps
-					SPRIG_DG_SECTION(TEXT("TextureFilterCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.TextureFilterCaps);
-				}
-				{
-					// CubeTextureFilterCaps
-					SPRIG_DG_SECTION(TEXT("CubeTextureFilterCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.CubeTextureFilterCaps);
-				}
-				{
-					// VolumeTextureFilterCaps
-					SPRIG_DG_SECTION(TEXT("VolumeTextureFilterCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.VolumeTextureFilterCaps);
-				}
-				{
-					// TextureAddressCaps
-					SPRIG_DG_SECTION(TEXT("TextureAddressCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.TextureAddressCaps);
-				}
-				{
-					// VolumeTextureAddressCaps
-					SPRIG_DG_SECTION(TEXT("VolumeTextureAddressCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.TextureFilterCaps);
-				}
-				{
-					// LineCaps
-					SPRIG_DG_SECTION(TEXT("LineCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.LineCaps);
-				}
-				{
-					// MaxTextureWidth
-					SPRIG_DG_SECTION(TEXT("MaxTextureWidth"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxTextureWidth);
-				}
-				{
-					// MaxTextureHeight
-					SPRIG_DG_SECTION(TEXT("MaxTextureHeight"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxTextureHeight);
-				}
-				{
-					// MaxVolumeExtent
-					SPRIG_DG_SECTION(TEXT("MaxVolumeExtent"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVolumeExtent);
-				}
-				{
-					// MaxTextureRepeat
-					SPRIG_DG_SECTION(TEXT("MaxTextureRepeat"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxTextureRepeat);
-				}
-				{
-					// MaxTextureAspectRatio
-					SPRIG_DG_SECTION(TEXT("MaxTextureAspectRatio"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxTextureAspectRatio);
-				}
-				{
-					// MaxAnisotropy
-					SPRIG_DG_SECTION(TEXT("MaxAnisotropy"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxAnisotropy);
-				}
-				{
-					// MaxVertexW
-					SPRIG_DG_SECTION(TEXT("MaxVertexW"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexW);
-				}
-				{
-					// GuardBandLeft
-					SPRIG_DG_SECTION(TEXT("GuardBandLeft"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.GuardBandLeft);
-				}
-				{
-					// GuardBandTop
-					SPRIG_DG_SECTION(TEXT("GuardBandTop"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.GuardBandTop);
-				}
-				{
-					// GuardBandRight
-					SPRIG_DG_SECTION(TEXT("GuardBandRight"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.GuardBandRight);
-				}
-				{
-					// GuardBandBottom
-					SPRIG_DG_SECTION(TEXT("GuardBandBottom"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.GuardBandBottom);
-				}
-				{
-					// ExtentsAdjust
-					SPRIG_DG_SECTION(TEXT("ExtentsAdjust"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.ExtentsAdjust);
-				}
-				{
-					// StencilCaps
-					SPRIG_DG_SECTION(TEXT("StencilCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.StencilCaps);
-				}
-				{
-					// FVFCaps
-					SPRIG_DG_SECTION(TEXT("FVFCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.FVFCaps);
-				}
-				{
-					// TextureOpCaps
-					SPRIG_DG_SECTION(TEXT("TextureOpCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.TextureOpCaps);
-				}
-				{
-					// MaxTextureBlendStages
-					SPRIG_DG_SECTION(TEXT("MaxTextureBlendStages"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxTextureBlendStages);
-				}
-				{
-					// MaxSimultaneousTextures
-					SPRIG_DG_SECTION(TEXT("MaxSimultaneousTextures"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxSimultaneousTextures);
-				}
-				{
-					// VertexProcessingCaps
-					SPRIG_DG_SECTION(TEXT("VertexProcessingCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.VertexProcessingCaps);
-				}
-				{
-					// MaxActiveLights
-					SPRIG_DG_SECTION(TEXT("MaxActiveLights"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxActiveLights);
-				}
-				{
-					// MaxUserClipPlanes
-					SPRIG_DG_SECTION(TEXT("MaxUserClipPlanes"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxUserClipPlanes);
-				}
-				{
-					// MaxVertexBlendMatrices
-					SPRIG_DG_SECTION(TEXT("MaxVertexBlendMatrices"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexBlendMatrices);
-				}
-				{
-					// MaxVertexBlendMatrixIndex
-					SPRIG_DG_SECTION(TEXT("MaxVertexBlendMatrixIndex"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexBlendMatrixIndex);
-				}
-				{
-					// MaxPointSize
-					SPRIG_DG_SECTION(TEXT("MaxPointSize"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxPointSize);
-				}
-				{
-					// MaxPrimitiveCount
-					SPRIG_DG_SECTION(TEXT("MaxPrimitiveCount"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxPrimitiveCount);
-				}
-				{
-					// MaxVertexIndex
-					SPRIG_DG_SECTION(TEXT("MaxVertexIndex"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexIndex);
-				}
-				{
-					// MaxStreams
-					SPRIG_DG_SECTION(TEXT("MaxStreams"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxStreams);
-				}
-				{
-					// MaxStreamStride
-					SPRIG_DG_SECTION(TEXT("MaxStreamStride"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxStreamStride);
-				}
-				{
-					// VertexShaderVersion
-					SPRIG_DG_SECTION(TEXT("VertexShaderVersion"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.VertexShaderVersion);
-				}
-				{
-					// MaxVertexShaderConst
-					SPRIG_DG_SECTION(TEXT("MaxVertexShaderConst"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexShaderConst);
-				}
-				{
-					// PixelShaderVersion
-					SPRIG_DG_SECTION(TEXT("PixelShaderVersion"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.PixelShaderVersion);
-				}
-				{
-					// PixelShader1xMaxValue
-					SPRIG_DG_SECTION(TEXT("PixelShader1xMaxValue"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.PixelShader1xMaxValue);
-				}
-				{
-					// DevCaps2
-					SPRIG_DG_SECTION(TEXT("DevCaps2"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.DevCaps2);
-				}
-				{
-					// MasterAdapterOrdinal
-					SPRIG_DG_SECTION(TEXT("MasterAdapterOrdinal"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MasterAdapterOrdinal);
-				}
-				{
-					// AdapterOrdinalInGroup
-					SPRIG_DG_SECTION(TEXT("AdapterOrdinalInGroup"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.AdapterOrdinalInGroup);
-				}
-				{
-					// NumberOfAdaptersInGroup
-					SPRIG_DG_SECTION(TEXT("NumberOfAdaptersInGroup"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.NumberOfAdaptersInGroup);
-				}
-				{
-					// DeclTypes
-					SPRIG_DG_SECTION(TEXT("DeclTypes"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.DeclTypes);
-				}
-				{
-					// NumSimultaneousRTs
-					SPRIG_DG_SECTION(TEXT("NumSimultaneousRTs"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.NumSimultaneousRTs);
-				}
-				{
-					// StretchRectFilterCaps
-					SPRIG_DG_SECTION(TEXT("StretchRectFilterCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.StretchRectFilterCaps);
-				}
-				//{
-				//	// VS20Caps
-				//	SPRIG_DG_SECTION(TEXT("VS20Caps"));
-				//	SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.VS20Caps);
-				//}
-				//{
-				//	// PS20Caps
-				//	SPRIG_DG_SECTION(TEXT("PS20Caps"));
-				//	SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.PS20Caps);
-				//}
-				{
-					// VertexTextureFilterCaps
-					SPRIG_DG_SECTION(TEXT("VertexTextureFilterCaps"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.VertexTextureFilterCaps);
-				}
-				{
-					// MaxVShaderInstructionsExecuted
-					SPRIG_DG_SECTION(TEXT("MaxVShaderInstructionsExecuted"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVShaderInstructionsExecuted);
-				}
-				{
-					// MaxPShaderInstructionsExecuted
-					SPRIG_DG_SECTION(TEXT("MaxPShaderInstructionsExecuted"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxPShaderInstructionsExecuted);
-				}
-				{
-					// MaxVertexShader30InstructionSlots
-					SPRIG_DG_SECTION(TEXT("MaxVertexShader30InstructionSlots"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexShader30InstructionSlots);
-				}
-				{
-					// MaxPixelShader30InstructionSlots
-					SPRIG_DG_SECTION(TEXT("MaxPixelShader30InstructionSlots"));
-					SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxPixelShader30InstructionSlots);
-				}
-
+			D3DCAPS9 caps;
+			if (FAILED(result = device->GetDeviceCaps(&caps))) {
+				SPRIG_DG_ERROR("レンダリングデバイスの能力取得に失敗しました", bad_process);
 				return result;
 			}
-		}	// anonymous-namespace
+
+			switch (caps.DeviceType) {
+			case D3DDEVTYPE_HAL:
+				SPRIG_DG_OUTPUT_VALUE(TEXT("DeviceType"), TEXT("D3DDEVTYPE_HAL"));
+				break;
+			case D3DDEVTYPE_NULLREF:
+				SPRIG_DG_OUTPUT_VALUE(TEXT("DeviceType"), TEXT("D3DDEVTYPE_NULLREF"));
+				break;
+			case D3DDEVTYPE_REF:
+				SPRIG_DG_OUTPUT_VALUE(TEXT("DeviceType"), TEXT("D3DDEVTYPE_REF"));
+				break;
+			case D3DDEVTYPE_SW:
+				SPRIG_DG_OUTPUT_VALUE(TEXT("DeviceType"), TEXT("D3DDEVTYPE_SW"));
+				break;
+			}
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスの種類を表します。"));
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("D3DDEVTYPE_HAL でない場合、ハードウェアによるラスタ化が行われずボトルネックになる可能性があります。"));
+
+			SPRIG_DG_OUTPUT_VALUE(TEXT("D3DCAPS3_COPY_TO_SYSTEMMEM"), (caps.Caps3 & D3DCAPS3_COPY_TO_SYSTEMMEM) != 0);
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスがローカルビデオメモリからシステムメモリへのメモリコピーを高速化できるかを表します。"));
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("偽の場合、高速化できずボトルネックになる可能性があります。"));
+
+			SPRIG_DG_OUTPUT_VALUE(TEXT("D3DPTEXTURECAPS_ALPHA"), (caps.TextureCaps & D3DPTEXTURECAPS_ALPHA) != 0);
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスがテクスチャピクセルでのアルファをサポートするかを表します。"));
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("偽の場合、アルファ処理が正常に行われない可能性があります。"));
+
+			SPRIG_DG_OUTPUT_VALUE(TEXT("D3DPMISCCAPS_SEPARATEALPHABLEND"), (caps.PrimitiveMiscCaps & D3DPMISCCAPS_SEPARATEALPHABLEND) != 0);
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスがアルファチャンネルに対する個別のブレンド設定をサポートするかを表します。"));
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("偽の場合、描画結果のアルファチャンネルが正常にならない可能性があります。"));
+
+			SPRIG_DG_OUTPUT_VALUE(TEXT("D3DPMISCCAPS_BLENDOP"), (caps.PrimitiveMiscCaps & D3DPMISCCAPS_BLENDOP) != 0);
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスが D3DBLENDOP_ADD 以外のアルファブレンディング処理をサポートするかを表します。"));
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("偽の場合、一部の描画処理が正常に行われない可能性があります。"));
+
+			SPRIG_DG_OUTPUT_VALUE(TEXT("MaxTextureWidth"), caps.MaxTextureWidth);
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスが作成可能なテクスチャの最大幅です。"));
+
+			SPRIG_DG_OUTPUT_VALUE(TEXT("MaxTextureHeight"), caps.MaxTextureHeight);
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("この値は、デバイスが作成可能なテクスチャの最大高さです。"));
+
+			SPRIG_DG_OUTPUT_COMMENT(TEXT("レンダリングデバイスの能力を出力します。"));
+			{
+				// DeviceType
+				SPRIG_DG_SECTION(TEXT("DeviceType"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.DeviceType);
+				switch (caps.DeviceType) {
+				case D3DDEVTYPE_HAL:
+					SPRIG_DG_OUTPUT_VALUE(TEXT("enum"), TEXT("D3DDEVTYPE_HAL"));
+					break;
+				case D3DDEVTYPE_NULLREF:
+					SPRIG_DG_OUTPUT_VALUE(TEXT("enum"), TEXT("D3DDEVTYPE_NULLREF"));
+					break;
+				case D3DDEVTYPE_REF:
+					SPRIG_DG_OUTPUT_VALUE(TEXT("enum"), TEXT("D3DDEVTYPE_REF"));
+					break;
+				case D3DDEVTYPE_SW:
+					SPRIG_DG_OUTPUT_VALUE(TEXT("enum"), TEXT("D3DDEVTYPE_SW"));
+					break;
+				}
+			}
+			{
+				// AdapterOrdinal
+				SPRIG_DG_SECTION(TEXT("AdapterOrdinal"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.AdapterOrdinal);
+			}
+			{
+				// Caps
+				SPRIG_DG_SECTION(TEXT("Caps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.Caps);
+				SPRIG_DG_OUTPUT_VALUE(TEXT("D3DCAPS_READ_SCANLINE"), caps.Caps & D3DCAPS_READ_SCANLINE);
+			}
+			{
+				// Caps2
+				SPRIG_DG_SECTION(TEXT("Caps2"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.Caps2);
+			}
+			{
+				// Caps3
+				SPRIG_DG_SECTION(TEXT("Caps3"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.Caps3);
+			}
+			{
+				// PresentationIntervals
+				SPRIG_DG_SECTION(TEXT("PresentationIntervals"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.PresentationIntervals);
+			}
+			{
+				// CursorCaps
+				SPRIG_DG_SECTION(TEXT("CursorCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.CursorCaps);
+			}
+			{
+				// DevCaps
+				SPRIG_DG_SECTION(TEXT("DevCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.DevCaps);
+			}
+			{
+				// PrimitiveMiscCaps
+				SPRIG_DG_SECTION(TEXT("PrimitiveMiscCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.PrimitiveMiscCaps);
+			}
+			{
+				// RasterCaps
+				SPRIG_DG_SECTION(TEXT("RasterCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.RasterCaps);
+			}
+			{
+				// ZCmpCaps
+				SPRIG_DG_SECTION(TEXT("ZCmpCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.ZCmpCaps);
+			}
+			{
+				// SrcBlendCaps
+				SPRIG_DG_SECTION(TEXT("SrcBlendCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.SrcBlendCaps);
+			}
+			{
+				// ZCmpCaps
+				SPRIG_DG_SECTION(TEXT("ZCmpCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.ZCmpCaps);
+			}
+			{
+				// DestBlendCaps
+				SPRIG_DG_SECTION(TEXT("DestBlendCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.DestBlendCaps);
+			}
+			{
+				// AlphaCmpCaps
+				SPRIG_DG_SECTION(TEXT("AlphaCmpCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.AlphaCmpCaps);
+			}
+			{
+				// ShadeCaps
+				SPRIG_DG_SECTION(TEXT("ShadeCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.ShadeCaps);
+			}
+			{
+				// ZCmpCaps
+				SPRIG_DG_SECTION(TEXT("TextureCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.TextureCaps);
+			}
+			{
+				// TextureFilterCaps
+				SPRIG_DG_SECTION(TEXT("TextureFilterCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.TextureFilterCaps);
+			}
+			{
+				// CubeTextureFilterCaps
+				SPRIG_DG_SECTION(TEXT("CubeTextureFilterCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.CubeTextureFilterCaps);
+			}
+			{
+				// VolumeTextureFilterCaps
+				SPRIG_DG_SECTION(TEXT("VolumeTextureFilterCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.VolumeTextureFilterCaps);
+			}
+			{
+				// TextureAddressCaps
+				SPRIG_DG_SECTION(TEXT("TextureAddressCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.TextureAddressCaps);
+			}
+			{
+				// VolumeTextureAddressCaps
+				SPRIG_DG_SECTION(TEXT("VolumeTextureAddressCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.TextureFilterCaps);
+			}
+			{
+				// LineCaps
+				SPRIG_DG_SECTION(TEXT("LineCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.LineCaps);
+			}
+			{
+				// MaxTextureWidth
+				SPRIG_DG_SECTION(TEXT("MaxTextureWidth"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxTextureWidth);
+			}
+			{
+				// MaxTextureHeight
+				SPRIG_DG_SECTION(TEXT("MaxTextureHeight"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxTextureHeight);
+			}
+			{
+				// MaxVolumeExtent
+				SPRIG_DG_SECTION(TEXT("MaxVolumeExtent"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVolumeExtent);
+			}
+			{
+				// MaxTextureRepeat
+				SPRIG_DG_SECTION(TEXT("MaxTextureRepeat"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxTextureRepeat);
+			}
+			{
+				// MaxTextureAspectRatio
+				SPRIG_DG_SECTION(TEXT("MaxTextureAspectRatio"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxTextureAspectRatio);
+			}
+			{
+				// MaxAnisotropy
+				SPRIG_DG_SECTION(TEXT("MaxAnisotropy"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxAnisotropy);
+			}
+			{
+				// MaxVertexW
+				SPRIG_DG_SECTION(TEXT("MaxVertexW"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexW);
+			}
+			{
+				// GuardBandLeft
+				SPRIG_DG_SECTION(TEXT("GuardBandLeft"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.GuardBandLeft);
+			}
+			{
+				// GuardBandTop
+				SPRIG_DG_SECTION(TEXT("GuardBandTop"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.GuardBandTop);
+			}
+			{
+				// GuardBandRight
+				SPRIG_DG_SECTION(TEXT("GuardBandRight"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.GuardBandRight);
+			}
+			{
+				// GuardBandBottom
+				SPRIG_DG_SECTION(TEXT("GuardBandBottom"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.GuardBandBottom);
+			}
+			{
+				// ExtentsAdjust
+				SPRIG_DG_SECTION(TEXT("ExtentsAdjust"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.ExtentsAdjust);
+			}
+			{
+				// StencilCaps
+				SPRIG_DG_SECTION(TEXT("StencilCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.StencilCaps);
+			}
+			{
+				// FVFCaps
+				SPRIG_DG_SECTION(TEXT("FVFCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.FVFCaps);
+			}
+			{
+				// TextureOpCaps
+				SPRIG_DG_SECTION(TEXT("TextureOpCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.TextureOpCaps);
+			}
+			{
+				// MaxTextureBlendStages
+				SPRIG_DG_SECTION(TEXT("MaxTextureBlendStages"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxTextureBlendStages);
+			}
+			{
+				// MaxSimultaneousTextures
+				SPRIG_DG_SECTION(TEXT("MaxSimultaneousTextures"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxSimultaneousTextures);
+			}
+			{
+				// VertexProcessingCaps
+				SPRIG_DG_SECTION(TEXT("VertexProcessingCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.VertexProcessingCaps);
+			}
+			{
+				// MaxActiveLights
+				SPRIG_DG_SECTION(TEXT("MaxActiveLights"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxActiveLights);
+			}
+			{
+				// MaxUserClipPlanes
+				SPRIG_DG_SECTION(TEXT("MaxUserClipPlanes"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxUserClipPlanes);
+			}
+			{
+				// MaxVertexBlendMatrices
+				SPRIG_DG_SECTION(TEXT("MaxVertexBlendMatrices"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexBlendMatrices);
+			}
+			{
+				// MaxVertexBlendMatrixIndex
+				SPRIG_DG_SECTION(TEXT("MaxVertexBlendMatrixIndex"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexBlendMatrixIndex);
+			}
+			{
+				// MaxPointSize
+				SPRIG_DG_SECTION(TEXT("MaxPointSize"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxPointSize);
+			}
+			{
+				// MaxPrimitiveCount
+				SPRIG_DG_SECTION(TEXT("MaxPrimitiveCount"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxPrimitiveCount);
+			}
+			{
+				// MaxVertexIndex
+				SPRIG_DG_SECTION(TEXT("MaxVertexIndex"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexIndex);
+			}
+			{
+				// MaxStreams
+				SPRIG_DG_SECTION(TEXT("MaxStreams"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxStreams);
+			}
+			{
+				// MaxStreamStride
+				SPRIG_DG_SECTION(TEXT("MaxStreamStride"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxStreamStride);
+			}
+			{
+				// VertexShaderVersion
+				SPRIG_DG_SECTION(TEXT("VertexShaderVersion"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.VertexShaderVersion);
+			}
+			{
+				// MaxVertexShaderConst
+				SPRIG_DG_SECTION(TEXT("MaxVertexShaderConst"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexShaderConst);
+			}
+			{
+				// PixelShaderVersion
+				SPRIG_DG_SECTION(TEXT("PixelShaderVersion"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.PixelShaderVersion);
+			}
+			{
+				// PixelShader1xMaxValue
+				SPRIG_DG_SECTION(TEXT("PixelShader1xMaxValue"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.PixelShader1xMaxValue);
+			}
+			{
+				// DevCaps2
+				SPRIG_DG_SECTION(TEXT("DevCaps2"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.DevCaps2);
+			}
+			{
+				// MasterAdapterOrdinal
+				SPRIG_DG_SECTION(TEXT("MasterAdapterOrdinal"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MasterAdapterOrdinal);
+			}
+			{
+				// AdapterOrdinalInGroup
+				SPRIG_DG_SECTION(TEXT("AdapterOrdinalInGroup"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.AdapterOrdinalInGroup);
+			}
+			{
+				// NumberOfAdaptersInGroup
+				SPRIG_DG_SECTION(TEXT("NumberOfAdaptersInGroup"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.NumberOfAdaptersInGroup);
+			}
+			{
+				// DeclTypes
+				SPRIG_DG_SECTION(TEXT("DeclTypes"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.DeclTypes);
+			}
+			{
+				// NumSimultaneousRTs
+				SPRIG_DG_SECTION(TEXT("NumSimultaneousRTs"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.NumSimultaneousRTs);
+			}
+			{
+				// StretchRectFilterCaps
+				SPRIG_DG_SECTION(TEXT("StretchRectFilterCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.StretchRectFilterCaps);
+			}
+			//{
+			//	// VS20Caps
+			//	SPRIG_DG_SECTION(TEXT("VS20Caps"));
+			//	SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.VS20Caps);
+			//}
+			//{
+			//	// PS20Caps
+			//	SPRIG_DG_SECTION(TEXT("PS20Caps"));
+			//	SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.PS20Caps);
+			//}
+			{
+				// VertexTextureFilterCaps
+				SPRIG_DG_SECTION(TEXT("VertexTextureFilterCaps"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.VertexTextureFilterCaps);
+			}
+			{
+				// MaxVShaderInstructionsExecuted
+				SPRIG_DG_SECTION(TEXT("MaxVShaderInstructionsExecuted"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVShaderInstructionsExecuted);
+			}
+			{
+				// MaxPShaderInstructionsExecuted
+				SPRIG_DG_SECTION(TEXT("MaxPShaderInstructionsExecuted"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxPShaderInstructionsExecuted);
+			}
+			{
+				// MaxVertexShader30InstructionSlots
+				SPRIG_DG_SECTION(TEXT("MaxVertexShader30InstructionSlots"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxVertexShader30InstructionSlots);
+			}
+			{
+				// MaxPixelShader30InstructionSlots
+				SPRIG_DG_SECTION(TEXT("MaxPixelShader30InstructionSlots"));
+				SPRIG_DG_OUTPUT_VALUE(TEXT("value"), caps.MaxPixelShader30InstructionSlots);
+			}
+
+			return result;
+		}
+
 		//
 		// output_device_caps_once_flag
 		//
@@ -649,18 +646,16 @@ namespace sprig {
 			}
 		};
 
-		namespace {
-			//
-			// output_device_caps_once
-			//
-			SPRIG_INLINE HRESULT output_device_caps_once(sprig::call_traits<device_type>::param_type device) {
-				HRESULT result = D3D_OK;
-				if (output_device_caps_once_flag::get_mutable_instance().get()) {
-					result = output_device_caps(device);
-				}
-				return result;
+		//
+		// output_device_caps_once
+		//
+		SPRIG_INLINE HRESULT output_device_caps_once(sprig::call_traits<device_type>::param_type device) {
+			HRESULT result = D3D_OK;
+			if (output_device_caps_once_flag::get_mutable_instance().get()) {
+				result = output_device_caps(device);
 			}
-		}	// anonymous-namespace
+			return result;
+		}
 	}	// namespace dg
 }	// namespace sprig
 

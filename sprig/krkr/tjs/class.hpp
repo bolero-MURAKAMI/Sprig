@@ -20,27 +20,28 @@
 namespace sprig {
 	namespace krkr {
 		namespace tjs {
-			namespace {
-				//
-				// COMMENT: 吉里吉里の（グローバル空間の）クラスオブジェクトを取得する。
-				//
-				SPRIG_INLINE iTJSDispatch2* GetTJSClass(tjs_char const* name) {
-					iTJSDispatch2* result;
-					tTJSVariant var;
-					::TVPExecuteExpression(name, &var);
-					if (!(result = var.AsObject()))
-						::TVPThrowExceptionMessage(SPRIG_KRKR_TJS_W("error in sprig::krkr::tjs::GetTJSClass()"));
-					return result;
-				}
-				SPRIG_INLINE iTJSDispatch2* GetTJSClassNoAddRef(tjs_char const* name) {
-					iTJSDispatch2* result;
-					tTJSVariant var;
-					::TVPExecuteExpression(name, &var);
-					if (!(result = var.AsObjectNoAddRef()))
-						::TVPThrowExceptionMessage(SPRIG_KRKR_TJS_W("error in sprig::krkr::tjs::GetTJSClassNoAddRef()"));
-					return result;
-				}
-			}	// anonymous-namespace
+			//
+			// GetTJSClass
+			// GetTJSClassNoAddRef
+			//
+			// COMMENT: 吉里吉里の（グローバル空間の）クラスオブジェクトを取得する。
+			//
+			SPRIG_INLINE iTJSDispatch2* GetTJSClass(tjs_char const* name) {
+				iTJSDispatch2* result;
+				tTJSVariant var;
+				::TVPExecuteExpression(name, &var);
+				if (!(result = var.AsObject()))
+					::TVPThrowExceptionMessage(SPRIG_KRKR_TJS_W("error in sprig::krkr::tjs::GetTJSClass()"));
+				return result;
+			}
+			SPRIG_INLINE iTJSDispatch2* GetTJSClassNoAddRef(tjs_char const* name) {
+				iTJSDispatch2* result;
+				tTJSVariant var;
+				::TVPExecuteExpression(name, &var);
+				if (!(result = var.AsObjectNoAddRef()))
+					::TVPThrowExceptionMessage(SPRIG_KRKR_TJS_W("error in sprig::krkr::tjs::GetTJSClassNoAddRef()"));
+				return result;
+			}
 		}	// namespace tjs
 	}	// namespace krkr
 }	// namespace sprig

@@ -67,59 +67,57 @@ namespace sprig {
 			{}
 		};
 
-		namespace {
-			//
-			// png_sig_check
-			//
-			SPRIG_INLINE bool png_sig_check(png_byte const* sig, png_size_t num_to_check) {
-				return ::png_sig_cmp(const_cast<png_bytep>(sig), 0, num_to_check) == 0;
-			}
+		//
+		// png_sig_check
+		//
+		SPRIG_INLINE bool png_sig_check(png_byte const* sig, png_size_t num_to_check) {
+			return ::png_sig_cmp(const_cast<png_bytep>(sig), 0, num_to_check) == 0;
+		}
 
-			//
-			// png_get_IHDR
-			//
-			SPRIG_INLINE bool png_get_IHDR(
-				png_structp png,
-				png_infop info,
-				IHDR& ihdr
+		//
+		// png_get_IHDR
+		//
+		SPRIG_INLINE bool png_get_IHDR(
+			png_structp png,
+			png_infop info,
+			IHDR& ihdr
+			)
+		{
+			return ::png_get_IHDR(
+				png,
+				info,
+				&ihdr.width,
+				&ihdr.height,
+				&ihdr.bit_depth,
+				&ihdr.color_type,
+				&ihdr.interlace_method,
+				&ihdr.compression_method,
+				&ihdr.filter_method
 				)
-			{
-				return ::png_get_IHDR(
-					png,
-					info,
-					&ihdr.width,
-					&ihdr.height,
-					&ihdr.bit_depth,
-					&ihdr.color_type,
-					&ihdr.interlace_method,
-					&ihdr.compression_method,
-					&ihdr.filter_method
-					)
-					!= 0;
-			}
+				!= 0;
+		}
 
-			//
-			// png_set_IHDR
-			//
-			SPRIG_INLINE void png_set_IHDR(
-				png_structp png,
-				png_infop info,
-				IHDR const& ihdr
-				)
-			{
-				::png_set_IHDR(
-					png,
-					info,
-					ihdr.width,
-					ihdr.height,
-					ihdr.bit_depth,
-					ihdr.color_type,
-					ihdr.interlace_method,
-					ihdr.compression_method,
-					ihdr.filter_method
-					);
-			}
-		}	// anonymous-namespace
+		//
+		// png_set_IHDR
+		//
+		SPRIG_INLINE void png_set_IHDR(
+			png_structp png,
+			png_infop info,
+			IHDR const& ihdr
+			)
+		{
+			::png_set_IHDR(
+				png,
+				info,
+				ihdr.width,
+				ihdr.height,
+				ihdr.bit_depth,
+				ihdr.color_type,
+				ihdr.interlace_method,
+				ihdr.compression_method,
+				ihdr.filter_method
+				);
+		}
 	}	// namespace png
 }	// namespace sprig
 

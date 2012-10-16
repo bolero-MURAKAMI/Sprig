@@ -215,80 +215,79 @@ namespace sprig {
 			return stream_;
 		}
 	};
-	namespace {
-		//
-		// construct_test_rich_string_tree
-		//
-		SPRIG_INLINE void construct_test_rich_string_tree(
-			sprig::rich_string_tree& tree,
-			std::size_t size,
-			std::size_t index,
-			std::size_t depth = 0,
-			std::size_t current = 0
-			)
-		{
-			typedef rich_string_tree tree_t;
-			typedef tree_t::node<>::type node_t;
-			typedef tree_t::leaf_type leaf_t;
-			typedef tree_t::option_type option_t;
-			tree.clear();
-			tree.option().first() = option_t::first_type("node");
-			tree.option().second().insert(
-				option_t::second_type::value_type(
-					option_t::second_type::value_type::first_type("depth"),
-					option_t::second_type::value_type::second_type(boost::lexical_cast<option_t::second_type::value_type::second_type>(current))
-					)
-				);
-			node_t& node(tree.get_node());
-			++current;
-			for (std::size_t i = 0; i < size; ++i) {
-				node.push_back(tree_t());
-				tree_t& child(node.at(i));
-				if (i == index && depth > current) {
-					construct_test_rich_string_tree(child, size, index, depth, current);
-				} else {
-					child.option().first() = option_t::first_type("leaf");
-					child.assign_leaf(boost::lexical_cast<leaf_t>(i));
-				}
+
+	//
+	// construct_test_rich_string_tree
+	//
+	SPRIG_INLINE void construct_test_rich_string_tree(
+		sprig::rich_string_tree& tree,
+		std::size_t size,
+		std::size_t index,
+		std::size_t depth = 0,
+		std::size_t current = 0
+		)
+	{
+		typedef rich_string_tree tree_t;
+		typedef tree_t::node<>::type node_t;
+		typedef tree_t::leaf_type leaf_t;
+		typedef tree_t::option_type option_t;
+		tree.clear();
+		tree.option().first() = option_t::first_type("node");
+		tree.option().second().insert(
+			option_t::second_type::value_type(
+				option_t::second_type::value_type::first_type("depth"),
+				option_t::second_type::value_type::second_type(boost::lexical_cast<option_t::second_type::value_type::second_type>(current))
+				)
+			);
+		node_t& node(tree.get_node());
+		++current;
+		for (std::size_t i = 0; i < size; ++i) {
+			node.push_back(tree_t());
+			tree_t& child(node.at(i));
+			if (i == index && depth > current) {
+				construct_test_rich_string_tree(child, size, index, depth, current);
+			} else {
+				child.option().first() = option_t::first_type("leaf");
+				child.assign_leaf(boost::lexical_cast<leaf_t>(i));
 			}
 		}
-		//
-		// construct_test_rich_wstring_tree
-		//
-		SPRIG_INLINE void construct_test_rich_wstring_tree(
-			sprig::rich_wstring_tree& tree,
-			std::size_t size,
-			std::size_t index,
-			std::size_t depth = 0,
-			std::size_t current = 0
-			)
-		{
-			typedef rich_wstring_tree tree_t;
-			typedef tree_t::node<>::type node_t;
-			typedef tree_t::leaf_type leaf_t;
-			typedef tree_t::option_type option_t;
-			tree.clear();
-			tree.option().first() = option_t::first_type(L"node");
-			tree.option().second().insert(
-				option_t::second_type::value_type(
-					option_t::second_type::value_type::first_type(L"depth"),
-					option_t::second_type::value_type::second_type(boost::lexical_cast<option_t::second_type::value_type::second_type>(current))
-					)
-				);
-			node_t& node(tree.get_node());
-			++current;
-			for (std::size_t i = 0; i < size; ++i) {
-				node.push_back(tree_t());
-				tree_t& child(node.at(i));
-				if (i == index && depth > current) {
-					construct_test_rich_wstring_tree(child, size, index, depth, current);
-				} else {
-					child.option().first() = option_t::first_type(L"leaf");
-					child.assign_leaf(boost::lexical_cast<leaf_t>(i));
-				}
+	}
+	//
+	// construct_test_rich_wstring_tree
+	//
+	SPRIG_INLINE void construct_test_rich_wstring_tree(
+		sprig::rich_wstring_tree& tree,
+		std::size_t size,
+		std::size_t index,
+		std::size_t depth = 0,
+		std::size_t current = 0
+		)
+	{
+		typedef rich_wstring_tree tree_t;
+		typedef tree_t::node<>::type node_t;
+		typedef tree_t::leaf_type leaf_t;
+		typedef tree_t::option_type option_t;
+		tree.clear();
+		tree.option().first() = option_t::first_type(L"node");
+		tree.option().second().insert(
+			option_t::second_type::value_type(
+				option_t::second_type::value_type::first_type(L"depth"),
+				option_t::second_type::value_type::second_type(boost::lexical_cast<option_t::second_type::value_type::second_type>(current))
+				)
+			);
+		node_t& node(tree.get_node());
+		++current;
+		for (std::size_t i = 0; i < size; ++i) {
+			node.push_back(tree_t());
+			tree_t& child(node.at(i));
+			if (i == index && depth > current) {
+				construct_test_rich_wstring_tree(child, size, index, depth, current);
+			} else {
+				child.option().first() = option_t::first_type(L"leaf");
+				child.assign_leaf(boost::lexical_cast<leaf_t>(i));
 			}
 		}
-	}	// anonymous-namespace
+	}
 }	// namespace sprig
 
 #endif	// #ifndef SPRIG_RICH_TREE_HPP

@@ -60,14 +60,12 @@
 
 namespace sprig {
 	namespace wave {
-		namespace {
-			//
-			// macros_head
-			//
-			char const* macros_head() {
-				return SPRIG_WAVE_MACROS_HEAD();
-			}
-		}	// anonymous-namespace
+		//
+		// macros_head
+		//
+		SPRIG_INLINE char const* macros_head() {
+			return SPRIG_WAVE_MACROS_HEAD();
+		}
 	}	// namespace wave
 }	// namespace sprig
 

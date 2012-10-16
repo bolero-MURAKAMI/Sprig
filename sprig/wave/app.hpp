@@ -244,30 +244,28 @@ namespace sprig {
 				> context_type;
 			};
 		}	// namespace app
-		namespace {
-			//
-			// print_value
-			//
-			SPRIG_INLINE void print_value(
-				string_argument const& name,
-				string_argument const& value
-				)
-			{
-				println(icout())("--")(name)(" = ")(value);
-			}
-			//
-			// print_option_exists
-			//
-			SPRIG_INLINE bool print_option_exists(
-				boost::program_options::variables_map const& vmap,
-				std::string const& name
-				)
-			{
-				bool exists = vmap.count(name) != 0;
-				print_value(name, (exists ? "yes" : "no"));
-				return exists;
-			}
-		}	// anonymous-namespace
+		//
+		// print_value
+		//
+		SPRIG_INLINE void print_value(
+			string_argument const& name,
+			string_argument const& value
+			)
+		{
+			println(icout())("--")(name)(" = ")(value);
+		}
+		//
+		// print_option_exists
+		//
+		SPRIG_INLINE bool print_option_exists(
+			boost::program_options::variables_map const& vmap,
+			std::string const& name
+			)
+		{
+			bool exists = vmap.count(name) != 0;
+			print_value(name, (exists ? "yes" : "no"));
+			return exists;
+		}
 		//
 		// print_option_as
 		//
@@ -281,39 +279,37 @@ namespace sprig {
 			print_value(name, value);
 			return value;
 		}
-		namespace {
-			//
-			// analy_options
-			//
-			SPRIG_INLINE void analy_options(
-				boost::program_options::variables_map& vmap,
-				int argc,
-				char* argv[]
-				)
-			{
-				println(icout())("Analy options:");
-				cindent ci("  ");
+		//
+		// analy_options
+		//
+		SPRIG_INLINE void analy_options(
+			boost::program_options::variables_map& vmap,
+			int argc,
+			char* argv[]
+			)
+		{
+			println(icout())("Analy options:");
+			cindent ci("  ");
 
-				app::options options;
-				bool const exists_config = options.analy(vmap, argc, argv);
+			app::options options;
+			bool const exists_config = options.analy(vmap, argc, argv);
 
-				print_option_as<std::string>(vmap, "config");
-				if (exists_config) {
-					println(icout())("Configration file found.");
-				} else {
-					println(icout())("Configration file not found.");
-				}
-
-				if (vmap.count("help")) {
-					println(icout())("Show help:");
-					std::cout << options.command_line_desc();
-					std::string s;
-					cin_acquire_any(s, ">Press Enter: ");
-				}
-
-				println(icout())("Succeeded!");
+			print_option_as<std::string>(vmap, "config");
+			if (exists_config) {
+				println(icout())("Configration file found.");
+			} else {
+				println(icout())("Configration file not found.");
 			}
-		}	// anonymous-namespace
+
+			if (vmap.count("help")) {
+				println(icout())("Show help:");
+				std::cout << options.command_line_desc();
+				std::string s;
+				cin_acquire_any(s, ">Press Enter: ");
+			}
+
+			println(icout())("Succeeded!");
+		}
 		//
 		// is_file_exists
 		//
@@ -325,49 +321,47 @@ namespace sprig {
 					;
 			}
 		};
-		namespace {
-			//
-			// get_input_path
-			//
-			SPRIG_INLINE boost::filesystem::path get_input_path(
-				boost::program_options::variables_map const& vmap
-				)
-			{
-				println(icout())("Get input path:");
-				cindent ci("  ");
+		//
+		// get_input_path
+		//
+		SPRIG_INLINE boost::filesystem::path get_input_path(
+			boost::program_options::variables_map const& vmap
+			)
+		{
+			println(icout())("Get input path:");
+			cindent ci("  ");
 
-				struct acquire_input {
-					void operator()(boost::filesystem::path& input_path) const {
-						std::string input_path_string;
-						cin_acquire_any_repeat_until(input_path_string, is_file_exists(), ">input-file: ");
-						input_path = input_path_string;
-					}
-				};
+			struct acquire_input {
+				void operator()(boost::filesystem::path& input_path) const {
+					std::string input_path_string;
+					cin_acquire_any_repeat_until(input_path_string, is_file_exists(), ">input-file: ");
+					input_path = input_path_string;
+				}
+			};
 
-				boost::filesystem::path input_path;
-				if (vmap.count("input-file")) {
-					println(icout())("Input file configrated.");
-					input_path = print_option_as<std::string>(vmap, "input-file");
-					if (boost::filesystem::exists(input_path)
-						&& !boost::filesystem::is_directory(input_path)
-						)
-					{
-						println(icout())("Input file found.");
-					} else {
-						println(icout())("Input file not found.");
-						acquire_input()(input_path);
-					}
+			boost::filesystem::path input_path;
+			if (vmap.count("input-file")) {
+				println(icout())("Input file configrated.");
+				input_path = print_option_as<std::string>(vmap, "input-file");
+				if (boost::filesystem::exists(input_path)
+					&& !boost::filesystem::is_directory(input_path)
+					)
+				{
+					println(icout())("Input file found.");
 				} else {
-					println(icout())("Input file not configrated.");
+					println(icout())("Input file not found.");
 					acquire_input()(input_path);
 				}
-
-				print_value("input-file", input_path);
-
-				println(icout())("Succeeded!");
-				return input_path;
+			} else {
+				println(icout())("Input file not configrated.");
+				acquire_input()(input_path);
 			}
-		}	// anonymous-namespace
+
+			print_value("input-file", input_path);
+
+			println(icout())("Succeeded!");
+			return input_path;
+		}
 		//
 		// get_input
 		//
@@ -688,49 +682,47 @@ namespace sprig {
 			println(icout())("Succeeded!");
 			return typename app::context_traits<Elem>::hooks_type(log, log_trace_include);
 		}
-		namespace {
-			//
-			// execute
-			//
-			SPRIG_INLINE bool execute(int argc, char* argv[]) {
-				println(icout())("Execute:");
-				cindent ci("  ");
+		//
+		// execute
+		//
+		SPRIG_INLINE bool execute(int argc, char* argv[]) {
+			println(icout())("Execute:");
+			cindent ci("  ");
 
-				//	COMMENT: オプション解析
-				boost::program_options::variables_map vmap;
-				analy_options(vmap, argc, argv);
+			//	COMMENT: オプション解析
+			boost::program_options::variables_map vmap;
+			analy_options(vmap, argc, argv);
 
-				//	COMMENT: 入力ファイル取得
-				boost::filesystem::path input_path = get_input_path(vmap);
-				std::string input = get_input<char>(input_path, vmap);
+			//	COMMENT: 入力ファイル取得
+			boost::filesystem::path input_path = get_input_path(vmap);
+			std::string input = get_input<char>(input_path, vmap);
 
-				//	COMMENT: 出力セットアップ
-				boost::iostreams::filtering_stream<boost::iostreams::output, char> code;
-				boost::iostreams::filtering_stream<boost::iostreams::output, char> log;
-				setup_output<char>(code, log, vmap);
+			//	COMMENT: 出力セットアップ
+			boost::iostreams::filtering_stream<boost::iostreams::output, char> code;
+			boost::iostreams::filtering_stream<boost::iostreams::output, char> log;
+			setup_output<char>(code, log, vmap);
 
-				//	COMMENT: フック処理セットアップ
-				app::context_traits<char>::hooks_type hooks = setup_hooks(log, vmap);
+			//	COMMENT: フック処理セットアップ
+			app::context_traits<char>::hooks_type hooks = setup_hooks(log, vmap);
 
-				//	COMMENT: コンテキストセットアップ
-				app::context_traits<char>::context_type context(
-					input.begin(),
-					input.end(),
-					input_path.string().c_str(),
-					hooks
-					);
-				setup_context(context, vmap);
+			//	COMMENT: コンテキストセットアップ
+			app::context_traits<char>::context_type context(
+				input.begin(),
+				input.end(),
+				input_path.string().c_str(),
+				hooks
+				);
+			setup_context(context, vmap);
 
-				//	COMMENT: イテレ―ション
-				bool succeeded = iterate_context(context, code, log, vmap);
+			//	COMMENT: イテレ―ション
+			bool succeeded = iterate_context(context, code, log, vmap);
 
-				if (succeeded) {
-					println(icout())("Succeeded!");
-				}
-
-				return succeeded;
+			if (succeeded) {
+				println(icout())("Succeeded!");
 			}
-		}	// anonymous-namespace
+
+			return succeeded;
+		}
 	}	// namespace wave
 }	// namespace sprig
 

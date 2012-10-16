@@ -62,72 +62,71 @@ namespace sprig {
 		}
 	};
 
-	namespace {
-		//
-		// icout
-		//
-		SPRIG_INLINE std::ostream& icout() {
-			return icout_proxy::get_mutable_instance().get();
-		}
-		//
-		// cout_some
-		//
-		SPRIG_INLINE void cout_some(
-			basic_string_argument<cindent_string_type> const& arg
-			)
-		{
-			icout() << arg;
-		}
-		//
-		// cout_line
-		//
-		SPRIG_INLINE void cout_line(
-			basic_string_argument<cindent_string_type> const& line
-			)
-		{
-			icout() << line << std::endl;
-		}
-		//
-		// cout_section_empty
-		//
-		SPRIG_INLINE void cout_section_empty(
-			basic_string_argument<cindent_string_type> const& name
-			)
-		{
-			icout() << basic_section_empty<cindent_string_type>(name) << std::endl;
-		}
-		SPRIG_INLINE void cout_section_empty(
-			basic_string_argument<cindent_string_type> const& name,
-			basic_attributes<cindent_string_type> const& attr
-			)
-		{
-			icout() << basic_section_empty<cindent_string_type>(name, attr) << std::endl;
-		}
-		//
-		// cout_section_line
-		//
+	//
+	// icout
+	//
+	SPRIG_INLINE std::ostream& icout() {
+		return icout_proxy::get_mutable_instance().get();
+	}
+	//
+	// cout_some
+	//
+	SPRIG_INLINE void cout_some(
+		basic_string_argument<cindent_string_type> const& arg
+		)
+	{
+		icout() << arg;
+	}
+	//
+	// cout_line
+	//
+	SPRIG_INLINE void cout_line(
+		basic_string_argument<cindent_string_type> const& line
+		)
+	{
+		icout() << line << std::endl;
+	}
+	//
+	// cout_section_empty
+	//
+	SPRIG_INLINE void cout_section_empty(
+		basic_string_argument<cindent_string_type> const& name
+		)
+	{
+		icout() << basic_section_empty<cindent_string_type>(name) << std::endl;
+	}
+	SPRIG_INLINE void cout_section_empty(
+		basic_string_argument<cindent_string_type> const& name,
+		basic_attributes<cindent_string_type> const& attr
+		)
+	{
+		icout() << basic_section_empty<cindent_string_type>(name, attr) << std::endl;
+	}
+	//
+	// cout_section_line
+	//
+	SPRIG_INLINE void cout_section_line(
+		basic_string_argument<cindent_string_type> const& name,
+		basic_string_argument<cindent_string_type> const& contents
+		)
+	{
+		icout() << basic_section_line<cindent_string_type>(name, contents) << std::endl;
+	}
 		SPRIG_INLINE void cout_section_line(
-			basic_string_argument<cindent_string_type> const& name,
-			basic_string_argument<cindent_string_type> const& contents
-			)
-		{
-			icout() << basic_section_line<cindent_string_type>(name, contents) << std::endl;
-		}
-			SPRIG_INLINE void cout_section_line(
-			basic_string_argument<cindent_string_type> const& name,
-			basic_string_argument<cindent_string_type> const& contents,
-			basic_attributes<cindent_string_type> const& attr
-			)
-		{
-			icout() << basic_section_line<cindent_string_type>(name, contents, attr) << std::endl;
-		}
-		//
-		// cout_section_comment
-		//
-		SPRIG_INLINE void cout_section_comment(basic_string_argument<cindent_string_type> const& comment) {
-			icout() << basic_section_comment<cindent_string_type>(comment) << std::endl;
-		}
-	}	// anonymous-namespace
+		basic_string_argument<cindent_string_type> const& name,
+		basic_string_argument<cindent_string_type> const& contents,
+		basic_attributes<cindent_string_type> const& attr
+		)
+	{
+		icout() << basic_section_line<cindent_string_type>(name, contents, attr) << std::endl;
+	}
+	//
+	// cout_section_comment
+	//
+	SPRIG_INLINE void cout_section_comment(basic_string_argument<cindent_string_type> const& comment) {
+		icout() << basic_section_comment<cindent_string_type>(comment) << std::endl;
+	}
+
 	//
 	// cindenter
 	//

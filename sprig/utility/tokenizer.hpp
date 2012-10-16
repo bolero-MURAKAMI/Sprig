@@ -13,34 +13,32 @@
 #include <sprig/utility/utility.hpp>
 
 namespace sprig {
-	namespace {
-		//
-		// get_first_token
-		//
-		SPRIG_INLINE std::string get_first_token(std::string const& source, char const* delimiters) {
-			boost::tokenizer<boost::char_separator<char>, std::string::const_iterator, std::string>
-				tokens(source, boost::char_separator<char>(delimiters));
-			return boost::lexical_cast<std::string>(*tokens.begin());
-		}
-		SPRIG_INLINE std::wstring get_first_token(std::wstring const& source, wchar_t const* delimiters) {
-			boost::tokenizer<boost::char_separator<wchar_t>, std::wstring::const_iterator, std::wstring>
-				tokens(source, boost::char_separator<wchar_t>(delimiters));
-			return boost::lexical_cast<std::wstring>(*tokens.begin());
-		}
-		//
-		// get_last_token
-		//
-		SPRIG_INLINE std::string get_last_token(std::string const& source, char const* delimiters) {
-			boost::tokenizer<boost::char_separator<char>, std::string::const_iterator, std::string>
-				tokens(source, boost::char_separator<char>(delimiters));
-			return boost::lexical_cast<std::string>(*back(tokens.begin(), tokens.end()));
-		}
-		SPRIG_INLINE std::wstring get_last_token(std::wstring const& source, wchar_t const* delimiters) {
-			boost::tokenizer<boost::char_separator<wchar_t>, std::wstring::const_iterator, std::wstring>
-				tokens(source, boost::char_separator<wchar_t>(delimiters));
-			return boost::lexical_cast<std::wstring>(*back(tokens.begin(), tokens.end()));
-		}
-	}	// anonymous-namespace
+	//
+	// get_first_token
+	//
+	SPRIG_INLINE std::string get_first_token(std::string const& source, char const* delimiters) {
+		boost::tokenizer<boost::char_separator<char>, std::string::const_iterator, std::string>
+			tokens(source, boost::char_separator<char>(delimiters));
+		return boost::lexical_cast<std::string>(*tokens.begin());
+	}
+	SPRIG_INLINE std::wstring get_first_token(std::wstring const& source, wchar_t const* delimiters) {
+		boost::tokenizer<boost::char_separator<wchar_t>, std::wstring::const_iterator, std::wstring>
+			tokens(source, boost::char_separator<wchar_t>(delimiters));
+		return boost::lexical_cast<std::wstring>(*tokens.begin());
+	}
+	//
+	// get_last_token
+	//
+	SPRIG_INLINE std::string get_last_token(std::string const& source, char const* delimiters) {
+		boost::tokenizer<boost::char_separator<char>, std::string::const_iterator, std::string>
+			tokens(source, boost::char_separator<char>(delimiters));
+		return boost::lexical_cast<std::string>(*back(tokens.begin(), tokens.end()));
+	}
+	SPRIG_INLINE std::wstring get_last_token(std::wstring const& source, wchar_t const* delimiters) {
+		boost::tokenizer<boost::char_separator<wchar_t>, std::wstring::const_iterator, std::wstring>
+			tokens(source, boost::char_separator<wchar_t>(delimiters));
+		return boost::lexical_cast<std::wstring>(*back(tokens.begin(), tokens.end()));
+	}
 } // namespace sprig
 
 #endif	// #ifndef SPRIG_UTILITY_TOKENIZER_HPP

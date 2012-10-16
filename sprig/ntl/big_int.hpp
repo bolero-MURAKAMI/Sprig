@@ -353,19 +353,17 @@ namespace sprig {
 	//	COMMENT: バイト列取得
 	//	NOTE: JavaのBigIntegerと違い、リトルエンディアンで解釈される
 	//
-	namespace {
-		SPRIG_INLINE void get_bytes(big_int const& v, big_int_detail::byte_type* dest, std::size_t n) {
-			std::vector<big_int_detail::byte_type> bytes(n);
-			NTL::BytesFromZZ(&bytes[0], v.get(), static_cast<long>(bytes.size()));
-			std::copy(bytes.begin(), bytes.end(), dest);
-		}
-		SPRIG_INLINE void get_bytes(big_int const& v, char* dest, std::size_t n) {
-			get_bytes(v, reinterpret_cast<big_int_detail::byte_type*>(dest), n);
-		}
-		SPRIG_INLINE void get_bytes(big_int const& v, signed char* dest, std::size_t n) {
-			get_bytes(v, reinterpret_cast<big_int_detail::byte_type*>(dest), n);
-		}
-	}	// anonymous-namespace
+	SPRIG_INLINE void get_bytes(big_int const& v, big_int_detail::byte_type* dest, std::size_t n) {
+		std::vector<big_int_detail::byte_type> bytes(n);
+		NTL::BytesFromZZ(&bytes[0], v.get(), static_cast<long>(bytes.size()));
+		std::copy(bytes.begin(), bytes.end(), dest);
+	}
+	SPRIG_INLINE void get_bytes(big_int const& v, char* dest, std::size_t n) {
+		get_bytes(v, reinterpret_cast<big_int_detail::byte_type*>(dest), n);
+	}
+	SPRIG_INLINE void get_bytes(big_int const& v, signed char* dest, std::size_t n) {
+		get_bytes(v, reinterpret_cast<big_int_detail::byte_type*>(dest), n);
+	}
 	template<std::size_t N>
 	SPRIG_INLINE void get_bytes(big_int const& v, big_int_detail::byte_type (&dest)[N]) {
 		get_bytes(v, dest, N);
@@ -405,66 +403,64 @@ namespace sprig {
 		std::copy(bytes.begin(), bytes.end(), out);
 	}
 
-	namespace {
-		//
-		// sign
-		//
-		SPRIG_INLINE big_int::sign sign(big_int const& v) {
-			return v == big_int::zero()
-				? big_int::sign_zero
-				: v > big_int::zero()
-					? big_int::sign_plus
-					: big_int::sign_minus
-				;
-		}
-		//
-		// abs
-		//
-		SPRIG_INLINE big_int abs(big_int const& v) {
-			return big_int(NTL::abs(v.get()));
-		}
-		SPRIG_INLINE void abs(big_int& d, big_int const& v) {
-			NTL::abs(d.ref(), v.get());
-		}
-		//
-		// pow
-		//
-		SPRIG_INLINE big_int pow(big_int const& v, big_int_detail::int_type e) {
-			return big_int(NTL::power(v.get(), e));
-		}
-		SPRIG_INLINE void pow(big_int& d, big_int const& v, big_int_detail::int_type e) {
-			NTL::power(d.ref(), v.get(), e);
-		}
-		//
-		// gcd
-		//
-		SPRIG_INLINE big_int gcd(big_int const& v1, big_int const& v2) {
-			big_int result;
-			NTL::GCD(result.ref(), v1.get(), v2.get());
-			return result;
-		}
-		SPRIG_INLINE void gcd(big_int& d, big_int const& v1, big_int const& v2) {
-			NTL::GCD(d.ref(), v1.get(), v2.get());
-		}
-		//
-		// max
-		//
-		SPRIG_INLINE big_int const& max(big_int const& v1, big_int const& v2) {
-			return (std::max)(v1, v2);
-		}
-		SPRIG_INLINE void max(big_int& d, big_int const& v1, big_int const& v2) {
-			d = (std::max)(v1, v2);
-		}
-		//
-		// min
-		//
-		SPRIG_INLINE big_int const& min(big_int const& v1, big_int const& v2) {
-			return (std::min)(v1, v2);
-		}
-		SPRIG_INLINE void min(big_int& d, big_int const& v1, big_int const& v2) {
-			d = (std::min)(v1, v2);
-		}
-	}	// anonymous-namespace
+	//
+	// sign
+	//
+	SPRIG_INLINE big_int::sign sign(big_int const& v) {
+		return v == big_int::zero()
+			? big_int::sign_zero
+			: v > big_int::zero()
+				? big_int::sign_plus
+				: big_int::sign_minus
+			;
+	}
+	//
+	// abs
+	//
+	SPRIG_INLINE big_int abs(big_int const& v) {
+		return big_int(NTL::abs(v.get()));
+	}
+	SPRIG_INLINE void abs(big_int& d, big_int const& v) {
+		NTL::abs(d.ref(), v.get());
+	}
+	//
+	// pow
+	//
+	SPRIG_INLINE big_int pow(big_int const& v, big_int_detail::int_type e) {
+		return big_int(NTL::power(v.get(), e));
+	}
+	SPRIG_INLINE void pow(big_int& d, big_int const& v, big_int_detail::int_type e) {
+		NTL::power(d.ref(), v.get(), e);
+	}
+	//
+	// gcd
+	//
+	SPRIG_INLINE big_int gcd(big_int const& v1, big_int const& v2) {
+		big_int result;
+		NTL::GCD(result.ref(), v1.get(), v2.get());
+		return result;
+	}
+	SPRIG_INLINE void gcd(big_int& d, big_int const& v1, big_int const& v2) {
+		NTL::GCD(d.ref(), v1.get(), v2.get());
+	}
+	//
+	// max
+	//
+	SPRIG_INLINE big_int const& max(big_int const& v1, big_int const& v2) {
+		return (std::max)(v1, v2);
+	}
+	SPRIG_INLINE void max(big_int& d, big_int const& v1, big_int const& v2) {
+		d = (std::max)(v1, v2);
+	}
+	//
+	// min
+	//
+	SPRIG_INLINE big_int const& min(big_int const& v1, big_int const& v2) {
+		return (std::min)(v1, v2);
+	}
+	SPRIG_INLINE void min(big_int& d, big_int const& v1, big_int const& v2) {
+		d = (std::min)(v1, v2);
+	}
 
 	//
 	// big_int_cast

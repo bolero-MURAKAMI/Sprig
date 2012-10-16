@@ -16,13 +16,11 @@ namespace sprig {
 			//
 			// octet_length
 			//
-			namespace {
-				SPRIG_INLINE tjs_uint octet_length(tTJSVariantOctet const* source) {
-					return source ? source->GetLength()
-						: 0
-						;
-				}
-			}	// anonymous-namespace
+			SPRIG_INLINE tjs_uint octet_length(tTJSVariantOctet const* source) {
+				return source ? source->GetLength()
+					: 0
+					;
+			}
 		}	// namespace tjs
 	}	// namespace krkr
 }	// namespace sprig
