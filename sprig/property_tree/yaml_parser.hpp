@@ -8,6 +8,7 @@
 #endif	// #ifdef SPRIG_USING_PRAGMA_ONCE
 
 #include <iterator>
+#include <vector>
 #include <string>
 #include <locale>
 #include <ostream>
@@ -42,7 +43,7 @@ namespace sprig {
 				//
 				// read_yaml_impl_process
 				//
-#ifdef SPRIG_CONFIG_EXTERNAL_YAML_CPP_USING_VERSION_UNDER_205
+#if defined(SPRIG_CONFIG_EXTERNAL_YAML_CPP_VERSION) && (SPRIG_CONFIG_EXTERNAL_YAML_CPP_VERSION <= 205)
 				template<typename Ptree>
 				SPRIG_INLINE void read_yaml_impl_process(
 					YAML::Node const& node,
@@ -140,7 +141,7 @@ namespace sprig {
 							);
 					}
 				}
-#else	// #ifdef SPRIG_CONFIG_EXTERNAL_YAML_CPP_USING_VERSION_UNDER_205
+#elif defined(SPRIG_CONFIG_EXTERNAL_YAML_CPP_VERSION) && (SPRIG_CONFIG_EXTERNAL_YAML_CPP_VERSION <= 300)
 				template<typename Ptree>
 				SPRIG_INLINE void read_yaml_impl_process(
 					YAML::Node const& node,
@@ -238,10 +239,103 @@ namespace sprig {
 							);
 					}
 				}
-#endif	// #ifdef SPRIG_CONFIG_EXTERNAL_YAML_CPP_USING_VERSION_UNDER_205
+#else	// #elif defined(SPRIG_CONFIG_EXTERNAL_YAML_CPP_VERSION) && (SPRIG_CONFIG_EXTERNAL_YAML_CPP_VERSION <= 300)
+				template<typename Ptree>
+				SPRIG_INLINE void read_yaml_impl_process(
+					YAML::Node const& node,
+					Ptree& pt,
+					std::string const& filename
+					)
+				{
+					typedef Ptree ptree_type;
+					typedef typename ptree_type::value_type value_type;
+					typedef typename ptree_type::key_type key_type;
+					switch (node.Type()) {
+					case YAML::NodeType::Null:
+						break;
+					case YAML::NodeType::Scalar:
+						pt.data() = node.Scalar();
+						break;
+					case YAML::NodeType::Sequence:
+						for (YAML::Node::const_iterator it = node.begin(), last_it = node.end(); it != last_it; ++it) {
+							pt.push_back(value_type(key_type(), ptree_type()));
+							read_yaml_impl_process(*it, pt.back().second, filename);
+						}
+						break;
+					case YAML::NodeType::Map:
+						for (YAML::Node::const_iterator it = node.begin(), last_it = node.end(); it != last_it; ++it) {
+							YAML::Node const& first = it.first();
+							YAML::Node const& second = it.second();
+							if (first.Type() != YAML::NodeType::Null && first.Type() != YAML::NodeType::Scalar) {
+								SPRIG_THROW_EXCEPTION(
+									yaml_parser_error("unsupported multi-content-key", filename, 0)
+									);
+							}
+							key_type key;
+							if (first.Type() == YAML::NodeType::Scalar) {
+								key = first.Scalar();
+							}
+							pt.push_back(value_type(key, ptree_type()));
+							read_yaml_impl_process(second, pt.back().second, filename);
+						}
+						break;
+					default:
+						SPRIG_THROW_EXCEPTION(
+							yaml_parser_error("undefined content-type", filename, 0)
+							);
+					}
+				}
+				template<typename Converter, typename Ptree>
+				SPRIG_INLINE void read_yaml_impl_process(
+					YAML::Node const& node,
+					Ptree& pt,
+					std::string const& filename,
+					Converter converter
+					)
+				{
+					typedef Ptree ptree_type;
+					typedef typename ptree_type::value_type value_type;
+					typedef typename ptree_type::key_type key_type;
+					switch (node.Type()) {
+					case YAML::NodeType::Null:
+						break;
+					case YAML::NodeType::Scalar:
+						pt.data() = converter.from_str(node.Scalar());
+						break;
+					case YAML::NodeType::Sequence:
+						for (YAML::Node::const_iterator it = node.begin(), last_it = node.end(); it != last_it; ++it) {
+							pt.push_back(value_type(key_type(), ptree_type()));
+							read_yaml_impl_process(*it, pt.back().second, filename, converter);
+						}
+						break;
+					case YAML::NodeType::Map:
+						for (YAML::Node::const_iterator it = node.begin(), last_it = node.end(); it != last_it; ++it) {
+							YAML::Node const& first = it->first;
+							YAML::Node const& second = it->second;
+							if (first.Type() != YAML::NodeType::Null && first.Type() != YAML::NodeType::Scalar) {
+								SPRIG_THROW_EXCEPTION(
+									yaml_parser_error("unsupported multi-content-key", filename, 0)
+									);
+							}
+							key_type key;
+							if (first.Type() == YAML::NodeType::Scalar) {
+								key = converter.from_str(first.Scalar());
+							}
+							pt.push_back(value_type(key, ptree_type()));
+							read_yaml_impl_process(second, pt.back().second, filename, converter);
+						}
+						break;
+					default:
+						SPRIG_THROW_EXCEPTION(
+							yaml_parser_error("undefined content-type", filename, 0)
+							);
+					}
+				}
+#endif
 				//
 				// read_yaml_impl
 				//
+#if defined(SPRIG_CONFIG_EXTERNAL_YAML_CPP_VERSION) && (SPRIG_CONFIG_EXTERNAL_YAML_CPP_VERSION <= 300)
 				template<typename Ptree>
 				SPRIG_INLINE void read_yaml_impl(
 					std::basic_istream<typename Ptree::key_type::value_type>& stream,
@@ -311,6 +405,67 @@ namespace sprig {
 						}
 					}
 				}
+#else	// #if defined(SPRIG_CONFIG_EXTERNAL_YAML_CPP_VERSION) && (SPRIG_CONFIG_EXTERNAL_YAML_CPP_VERSION <= 300)
+				template<typename Ptree>
+				SPRIG_INLINE void read_yaml_impl(
+					std::basic_istream<typename Ptree::key_type::value_type>& stream,
+					Ptree& pt,
+					std::string const& filename,
+					int flags = 0,
+					typename boost::enable_if<
+						is_internal_implemented<Ptree>
+					>::type* = 0
+					)
+				{
+					typedef Ptree ptree_type;
+					typedef typename ptree_type::value_type value_type;
+					typedef typename ptree_type::key_type key_type;
+					if (flags & reader_flags::multi_document) {
+						std::vector<YAML::Node> docs = YAML::LoadAll(stream);
+						BOOST_FOREACH(std::vector<YAML::Node>::value_type const& doc, docs) {
+							pt.push_back(value_type(key_type(), ptree_type()));
+							read_yaml_impl_process(doc, pt.back().second, filename);
+						}
+					} else {
+						YAML::Node doc = YAML::Load(stream);
+						read_yaml_impl_process(doc, pt, filename);
+					}
+				}
+				template<typename Converter, typename Ptree>
+				SPRIG_INLINE void read_yaml_impl(
+					std::basic_istream<typename Ptree::key_type::value_type>& stream,
+					Ptree& pt,
+					std::string const& filename,
+					Converter converter,
+					int flags = 0
+					)
+				{
+					typedef Ptree ptree_type;
+					typedef typename ptree_type::value_type value_type;
+					typedef typename ptree_type::key_type key_type;
+					key_type src;
+					std::copy(
+						std::istreambuf_iterator<typename Ptree::key_type::value_type>(stream),
+						std::istreambuf_iterator<typename Ptree::key_type::value_type>(),
+						std::back_inserter(src)
+						);
+					{
+						std::istringstream stream(
+							converter.to_str(src)
+							);
+						if (flags & reader_flags::multi_document) {
+							std::vector<YAML::Node> docs = YAML::LoadAll(stream);
+							BOOST_FOREACH(std::vector<YAML::Node>::value_type const& doc, docs) {
+								pt.push_back(value_type(key_type(), ptree_type()));
+								read_yaml_impl_process(doc, pt.back().second, filename, converter);
+							}
+						} else {
+							YAML::Node doc = YAML::Load(stream);
+							read_yaml_impl_process(doc, pt, filename, converter);
+						}
+					}
+				}
+#endif
 			}	// namespace parser_detail
 			//
 			// read_yaml
@@ -471,14 +626,24 @@ namespace sprig {
 								yaml_parser_error("illegal multi-document", filename, 0)
 								);
 						}
-						BOOST_FOREACH(value_type const& e, pt) {
+						{
 							YAML::Emitter emitter;
-							write_yaml_impl_process(emitter, e.second, filename);
+							BOOST_FOREACH(value_type const& e, pt) {
+								emitter << YAML::BeginDoc;
+								write_yaml_impl_process(emitter, e.second, filename);
+								if (flags & writer_flags::insert_end_of_document) {
+									emitter << YAML::EndDoc;
+								}
+							}
 							stream << emitter.c_str() << std::endl;
 						}
 					} else {
 						YAML::Emitter emitter;
+						emitter << YAML::BeginDoc;
 						write_yaml_impl_process(emitter, pt, filename);
+						if (flags & writer_flags::insert_end_of_document) {
+							emitter << YAML::EndDoc;
+						}
 						stream << emitter.c_str() << std::endl;
 					}
 				}
@@ -500,14 +665,24 @@ namespace sprig {
 								yaml_parser_error("illegal multi-document", filename, 0)
 								);
 						}
-						BOOST_FOREACH(value_type const& e, pt) {
+						{
 							YAML::Emitter emitter;
-							write_yaml_impl_process(emitter, e.second, filename, converter);
+							BOOST_FOREACH(value_type const& e, pt) {
+								emitter << YAML::BeginDoc;
+								write_yaml_impl_process(emitter, e.second, filename, converter);
+								if (flags & writer_flags::insert_end_of_document) {
+									emitter << YAML::EndDoc;
+								}
+							}
 							stream << converter.from_str(emitter.c_str()) << std::endl;
 						}
 					} else {
 						YAML::Emitter emitter;
+						emitter << YAML::BeginDoc;
 						write_yaml_impl_process(emitter, pt, filename, converter);
+						if (flags & writer_flags::insert_end_of_document) {
+							emitter << YAML::EndDoc;
+						}
 						stream << converter.from_str(emitter.c_str()) << std::endl;
 					}
 				}

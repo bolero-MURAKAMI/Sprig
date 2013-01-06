@@ -45,6 +45,7 @@ namespace sprig {
 				static int const sequence_block  = 0x04;
 				static int const map_flow  = 0x08;
 				static int const map_block  = 0x10;
+				static int const insert_end_of_document  = 0x20;
 			};
 			//
 			// validate_writer_flags
