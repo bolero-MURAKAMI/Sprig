@@ -1,3 +1,10 @@
+/*=============================================================================
+  Copyright (c) 2010-2014 Bolero MURAKAMI
+  https://github.com/bolero-MURAKAMI/Sprig
+
+  Distributed under the Boost Software License, Version 1.0. (See accompanying
+  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+=============================================================================*/
 #ifndef SPRIG_RANDOM_FIXED_RANGE_HELPER_HPP
 #define SPRIG_RANDOM_FIXED_RANGE_HELPER_HPP
 

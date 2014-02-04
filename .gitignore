@@ -1,20 +1,3 @@
 
-/config/libconfig/alut.hpp
-/config/libconfig/bzip2.hpp
-/config/libconfig/devil.hpp
-/config/libconfig/expat.hpp
-/config/libconfig/freetype.hpp
-/config/libconfig/htmlcxx.hpp
-/config/libconfig/icu.hpp
-/config/libconfig/irrlicht.hpp
-/config/libconfig/libjpeg.hpp
-/config/libconfig/libpng.hpp
-/config/libconfig/libtiff.hpp
-/config/libconfig/ncbind.hpp
-/config/libconfig/ntl.hpp
-/config/libconfig/openal.hpp
-/config/libconfig/opencv.hpp
-/config/libconfig/openssl.hpp
-/config/libconfig/tp_stub.hpp
-/config/libconfig/yamlcpp.hpp
-/config/libconfig/zlib.hpp
+/config/
+.gitignore
