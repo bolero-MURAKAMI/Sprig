@@ -32,7 +32,18 @@
 		SPRIG_KRKR_NUMPARAMS_EASY_CHECK(NUM); \
 		for (tjs_int i = 0; i < NUM; ++i) { \
 			if (param[i]->Type() == tvtVoid) \
-				return TJS_E_BADPARAMCOUNT; \
+				return TJS_E_INVALIDPARAM; \
+		} \
+	}
+//
+// SPRIG_KRKR_NUMPARAMS_CHECK_FOR
+//
+#define SPRIG_KRKR_NUMPARAMS_CHECK_FOR(FIRST, LAST) \
+	{ \
+		SPRIG_KRKR_NUMPARAMS_EASY_CHECK(LAST); \
+		for (tjs_int i = FIRST; i < LAST; ++i) { \
+			if (param[i]->Type() == tvtVoid) \
+				return TJS_E_INVALIDPARAM; \
 		} \
 	}
 //

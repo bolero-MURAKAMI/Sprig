@@ -24,74 +24,74 @@ namespace sprig {
 			// COMMENT: オブジェクトからプロパティの値を取得する。
 			//
 			template<typename T>
-			SPRIG_INLINE T GetPropValue(iTJSDispatch2* that, tjs_char const* membername) {
+			SPRIG_INLINE T GetPropValue(iTJSDispatch2* obj, tjs_char const* membername) {
 				tTJSVariant var;
-				return static_cast<T>(*PropGet(that, 0, membername, 0, &var, that));
+				return static_cast<T>(*PropGet(obj, 0, membername, 0, &var, obj));
 			}
 			template<typename T>
-			SPRIG_INLINE T GetPropValue(iTJSDispatch2* that, tjs_char const* membername, iTJSDispatch2* objthis) {
+			SPRIG_INLINE T GetPropValue(iTJSDispatch2* obj, iTJSDispatch2* objthis, tjs_char const* membername) {
 				tTJSVariant var;
-				return static_cast<T>(*PropGet(that, 0, membername, 0, &var, objthis));
+				return static_cast<T>(*PropGet(obj, 0, membername, 0, &var, objthis));
 			}
 			template<typename T>
 			SPRIG_INLINE T GetPropValue(tTJSVariantClosure const& closure, tjs_char const* membername) {
-				return GetPropValue<T>(closure.Object, membername, closure.ObjThis);
+				return GetPropValue<T>(closure.Object, closure.ObjThis, membername);
 			}
 			//
-			// COMMENT: プロパティオブジェクトをthatとして、オブジェクトからプロパティの値を取得する。
+			// COMMENT: プロパティオブジェクトを対象として、オブジェクトからプロパティの値を取得する。
 			//
 			template<typename T>
-			SPRIG_INLINE T GetPropValue(iTJSDispatch2* that, iTJSDispatch2* objthis) {
+			SPRIG_INLINE T GetPropValue(iTJSDispatch2* obj, iTJSDispatch2* objthis) {
 				tTJSVariant var;
-				return static_cast<T>(*PropGet(that, 0, 0, 0, &var, objthis));
+				return static_cast<T>(*PropGet(obj, 0, 0, 0, &var, objthis));
 			}
 			//
 			// COMMENT: 序数によって、オブジェクトからプロパティの値を取得する。
 			//
 			template<typename T>
-			SPRIG_INLINE T GetPropValue(tjs_int num, iTJSDispatch2* obj) {
+			SPRIG_INLINE T GetPropValue(iTJSDispatch2* obj, tjs_int num) {
 				tTJSVariant var;
 				return static_cast<T>(*PropGetByNum(obj, 0, num, &var, obj));
 			}
 			template<typename T>
-			SPRIG_INLINE T GetPropValue(tjs_int num, iTJSDispatch2* obj, iTJSDispatch2* objthis) {
+			SPRIG_INLINE T GetPropValue(iTJSDispatch2* obj, iTJSDispatch2* objthis, tjs_int num) {
 				tTJSVariant var;
 				return static_cast<T>(*PropGetByNum(obj, 0, num, &var, objthis));
 			}
 			template<typename T>
-			SPRIG_INLINE T GetPropValue(tjs_int num, tTJSVariantClosure const& closure) {
-				return GetPropValue<T>(num, closure.Object, closure.ObjThis);
+			SPRIG_INLINE T GetPropValue(tTJSVariantClosure const& closure, tjs_int num) {
+				return GetPropValue<T>(closure.Object, closure.ObjThis, num);
 			}
 
 			//
 			// COMMENT: オブジェクトへプロパティの値を設定する。
 			//
-			SPRIG_INLINE void SetPropValue(tTJSVariant const& var, iTJSDispatch2* that, tjs_char const* membername) {
-				PropSet(that, 0, membername, 0, &var, that);
+			SPRIG_INLINE void SetPropValue(iTJSDispatch2* obj, tjs_char const* membername, tTJSVariant const& var) {
+				PropSet(obj, 0, membername, 0, &var, obj);
 			}
-			SPRIG_INLINE void SetPropValue(tTJSVariant const& var, iTJSDispatch2* that, tjs_char const* membername, iTJSDispatch2* objthis) {
-				PropSet(that, 0, membername, 0, &var, objthis);
+			SPRIG_INLINE void SetPropValue(iTJSDispatch2* obj, iTJSDispatch2* objthis, tjs_char const* membername, tTJSVariant const& var) {
+				PropSet(obj, 0, membername, 0, &var, objthis);
 			}
-			SPRIG_INLINE void SetPropValue(tTJSVariant const& var, tTJSVariantClosure const& closure, tjs_char const* membername) {
-				SetPropValue(var, closure.Object, membername, closure.ObjThis);
+			SPRIG_INLINE void SetPropValue(tTJSVariantClosure const& closure, tjs_char const* membername, tTJSVariant const& var) {
+				SetPropValue(closure.Object, closure.ObjThis, membername, var);
 			}
 			//
-			// COMMENT: プロパティオブジェクトをthatとして、オブジェクトへプロパティの値を設定する。
+			// COMMENT: プロパティオブジェクトを対象として、オブジェクトへプロパティの値を設定する。
 			//
-			SPRIG_INLINE void SetPropValue(tTJSVariant const& var, iTJSDispatch2* that, iTJSDispatch2* objthis) {
-				PropSet(that, 0, 0, 0, &var, objthis);
+			SPRIG_INLINE void SetPropValue(iTJSDispatch2* obj, iTJSDispatch2* objthis, tTJSVariant const& var) {
+				PropSet(obj, 0, 0, 0, &var, objthis);
 			}
 			//
 			// COMMENT: 序数によって、オブジェクトへプロパティの値を設定する。
 			//
-			SPRIG_INLINE void SetPropValue(tTJSVariant const& var, tjs_int num, iTJSDispatch2* obj) {
+			SPRIG_INLINE void SetPropValue(iTJSDispatch2* obj, tjs_int num, tTJSVariant const& var) {
 				PropSetByNum(obj, 0, num, &var, obj);
 			}
-			SPRIG_INLINE void SetPropValue(tTJSVariant const& var, tjs_int num, iTJSDispatch2* obj, iTJSDispatch2* objthis) {
+			SPRIG_INLINE void SetPropValue(iTJSDispatch2* obj, iTJSDispatch2* objthis, tjs_int num, tTJSVariant const& var) {
 				PropSetByNum(obj, 0, num, &var, objthis);
 			}
-			SPRIG_INLINE void SetPropValue(tTJSVariant const& var, tjs_int num, tTJSVariantClosure const& closure) {
-				SetPropValue(var, num, closure.Object, closure.ObjThis);
+			SPRIG_INLINE void SetPropValue(tTJSVariantClosure const& closure, tjs_int num, tTJSVariant const& var) {
+				SetPropValue(closure.Object, closure.ObjThis, num, var);
 			}
 		}	// namespace tjs
 	}	// namespace krkr
