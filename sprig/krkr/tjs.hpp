@@ -29,6 +29,8 @@
 #include <sprig/krkr/tjs/exception.hpp>
 #include <sprig/krkr/tjs/instance.hpp>
 #include <sprig/krkr/tjs/as_c_str.hpp>
+#include <sprig/krkr/tjs/escape_c.hpp>
+#include <sprig/krkr/tjs/as_variant.hpp>
 #include <sprig/krkr/tjs/octet_data.hpp>
 #include <sprig/krkr/tjs/octet_length.hpp>
 

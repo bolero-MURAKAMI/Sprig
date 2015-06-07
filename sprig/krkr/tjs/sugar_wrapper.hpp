@@ -15,110 +15,113 @@
 #endif	// #ifdef SPRIG_USING_PRAGMA_ONCE
 
 #include <sprig/external/tp_stub.hpp>
+#include <sprig/get_pointer.hpp>
+#include <sprig/krkr/tjs/typedef.hpp>
 #include <sprig/krkr/tjs/error_wrapper.hpp>
 
 namespace sprig {
 	namespace krkr {
 		namespace tjs {
-				SPRIG_INLINE void CreateNewObject(
-					iTJSDispatch2* obj,
-					iTJSDispatch2** result,
+				SPRIG_INLINE sprig::krkr::tjs::object_type CreateNewObject(
+					sprig::krkr::tjs::object_type const& obj,
 					tjs_int numparams,
 					tTJSVariant** param,
-					iTJSDispatch2* objthis
-					)
-				{
-					CreateNew(obj, 0, 0, 0, result, numparams, param, objthis);
-				}
-				SPRIG_INLINE iTJSDispatch2* CreateNewObject(
-					iTJSDispatch2* obj,
-					tjs_int numparams,
-					tTJSVariant** param,
-					iTJSDispatch2* objthis
+					sprig::krkr::tjs::object_type const& objthis
 					)
 				{
 					iTJSDispatch2* result = 0;
-					CreateNewObject(obj, &result, numparams, param, objthis);
-					return result;
+					CreateNew(sprig::get_pointer(obj), 0, 0, 0, &result, numparams, param, sprig::get_pointer(objthis));
+					return sprig::krkr::tjs::object_type(result, false);
 				}
-				SPRIG_INLINE void FuncObjectCall(
-					iTJSDispatch2* obj,
+				SPRIG_INLINE tTJSVariant* FuncObjectCall(
+					sprig::krkr::tjs::object_type const& obj,
 					tTJSVariant* result,
 					tjs_int numparams,
 					tTJSVariant** param,
-					iTJSDispatch2* objthis
+					sprig::krkr::tjs::object_type const& objthis
 					)
 				{
-					FuncCall(obj, 0, 0, 0, result, numparams, param, objthis);
+					FuncCall(sprig::get_pointer(obj), 0, 0, 0, result, numparams, param, sprig::get_pointer(objthis));
+					return result;
 				}
-				SPRIG_INLINE void MethodCall(
-					iTJSDispatch2* obj,
+				SPRIG_INLINE tTJSVariant FuncObjectCall(
+					sprig::krkr::tjs::object_type const& obj,
+					tjs_int numparams,
+					tTJSVariant** param,
+					sprig::krkr::tjs::object_type const& objthis
+					)
+				{
+					tTJSVariant result;
+					return *FuncObjectCall(obj, &result, numparams, param, objthis);
+				}
+				SPRIG_INLINE tTJSVariant* MethodCall(
+					sprig::krkr::tjs::object_type const& obj,
 					tjs_char const* membername,
 					tTJSVariant* result,
 					tjs_int numparams,
 					tTJSVariant** param
 					)
 				{
-					FuncCall(obj, 0, membername, 0, result, numparams, param, obj);
+					FuncCall(sprig::get_pointer(obj), 0, membername, 0, result, numparams, param, sprig::get_pointer(obj));
+					return result;
 				}
-				SPRIG_INLINE void MethodCall(
-					iTJSDispatch2* obj,
+				SPRIG_INLINE tTJSVariant MethodCall(
+					sprig::krkr::tjs::object_type const& obj,
 					tjs_char const* membername,
-					tTJSVariant* result,
 					tjs_int numparams,
-					tTJSVariant** param,
-					iTJSDispatch2* objthis
+					tTJSVariant** param
 					)
 				{
-					FuncCall(obj, 0, membername, 0, result, numparams, param, objthis);
+					tTJSVariant result;
+					return *MethodCall(obj, membername, &result, numparams, param);
 				}
-				SPRIG_INLINE tjs_int GetCount(iTJSDispatch2* obj) {
+				SPRIG_INLINE tjs_int GetCount(sprig::krkr::tjs::object_type const& obj) {
 					tjs_int result;
-					return *GetCount(obj, &result, 0, 0, 0);
+					return *GetCount(sprig::get_pointer(obj), &result, 0, 0, 0);
 				}
-				SPRIG_INLINE tTJSVariant GetMember(iTJSDispatch2* obj, tjs_char const* membername) {
+				SPRIG_INLINE tTJSVariant GetMember(sprig::krkr::tjs::object_type const& obj, tjs_char const* membername) {
 					tTJSVariant result;
-					return *PropGet(obj, 0, membername, 0, &result, obj);
+					return *PropGet(sprig::get_pointer(obj), 0, membername, 0, &result, sprig::get_pointer(obj));
 				}
-				SPRIG_INLINE tTJSVariant GetMember(iTJSDispatch2* obj, iTJSDispatch2* objthis, tjs_char const* membername) {
+				SPRIG_INLINE tTJSVariant GetMember(sprig::krkr::tjs::object_type const& obj, sprig::krkr::tjs::object_type const& objthis, tjs_char const* membername) {
 					tTJSVariant result;
-					return *PropGet(obj, 0, membername, 0, &result, objthis);
+					return *PropGet(sprig::get_pointer(obj), 0, membername, 0, &result, sprig::get_pointer(objthis));
 				}
-				SPRIG_INLINE bool IsInstanceObjectOf(iTJSDispatch2* obj, tjs_char const* classname) {
-					return IsInstanceOf(obj, 0, 0, 0, classname, obj);
+				SPRIG_INLINE bool IsInstanceObjectOf(sprig::krkr::tjs::object_type const& obj, tjs_char const* classname) {
+					return IsInstanceOf(sprig::get_pointer(obj), 0, 0, 0, classname, sprig::get_pointer(obj));
 				}
-				SPRIG_INLINE bool IsInstanceObjectOf(iTJSDispatch2* obj, tjs_int num, tjs_char const* classname) {
-					return IsInstanceOfByNum(obj, 0, num, classname, obj);
+				SPRIG_INLINE bool IsInstanceObjectOf(sprig::krkr::tjs::object_type const& obj, tjs_int num, tjs_char const* classname) {
+					return IsInstanceOfByNum(sprig::get_pointer(obj), 0, num, classname, sprig::get_pointer(obj));
 				}
-				SPRIG_INLINE void AddMember(iTJSDispatch2* obj, tjs_char const* name, tTJSVariant const& member) {
-					PropSet(obj, TJS_MEMBERENSURE, name, 0, &member, obj);
+				SPRIG_INLINE void AddMember(sprig::krkr::tjs::object_type const& obj, tjs_char const* name, tTJSVariant const& member) {
+					PropSet(sprig::get_pointer(obj), TJS_MEMBERENSURE, name, 0, &member, sprig::get_pointer(obj));
 				}
-				SPRIG_INLINE void AddMember(iTJSDispatch2* obj, tjs_int num, tTJSVariant const& member) {
-					PropSetByNum(obj, TJS_MEMBERENSURE, num, &member, obj);
+				SPRIG_INLINE void AddMember(sprig::krkr::tjs::object_type const& obj, tjs_int num, tTJSVariant const& member) {
+					PropSetByNum(sprig::get_pointer(obj), TJS_MEMBERENSURE, num, &member, sprig::get_pointer(obj));
 				}
-				SPRIG_INLINE void AddNewMember(iTJSDispatch2* obj, tjs_char const* name, iTJSDispatch2* member) {
-					tTJSVariant var(member);
+				SPRIG_INLINE void AddNewMember(sprig::krkr::tjs::object_type const& obj, tjs_char const* name, sprig::krkr::tjs::object_type const& member) {
+					tTJSVariant var(sprig::get_pointer(member));
 					member->Release();
-					PropSet(obj, TJS_MEMBERENSURE, name, 0, &var, obj);
+					PropSet(sprig::get_pointer(obj), TJS_MEMBERENSURE, name, 0, &var, sprig::get_pointer(obj));
 				}
-				SPRIG_INLINE void AddNewMember(iTJSDispatch2* obj, tjs_int num, iTJSDispatch2* member) {
-					tTJSVariant var(member);
+				SPRIG_INLINE void AddNewMember(sprig::krkr::tjs::object_type const& obj, tjs_int num, sprig::krkr::tjs::object_type const& member) {
+					tTJSVariant var(sprig::get_pointer(member));
 					member->Release();
-					PropSetByNum(obj, TJS_MEMBERENSURE, num, &var, obj);
+					PropSetByNum(sprig::get_pointer(obj), TJS_MEMBERENSURE, num, &var, sprig::get_pointer(obj));
 				}
-				SPRIG_INLINE tTJSVariant GetClassMember(iTJSDispatch2* obj, tjs_char const* name) {
+				SPRIG_INLINE tTJSVariant GetClassMember(sprig::krkr::tjs::object_type const& obj, tjs_char const* name) {
 					tTJSVariant var;
-					return *PropGet(obj, TJS_IGNOREPROP, name, 0, &var, obj);
+					return *PropGet(sprig::get_pointer(obj), TJS_IGNOREPROP, name, 0, &var, sprig::get_pointer(obj));
 				}
-				SPRIG_INLINE tTJSVariant GetClassMember(iTJSDispatch2* obj, tjs_int num) {
+				SPRIG_INLINE tTJSVariant GetClassMember(sprig::krkr::tjs::object_type const& obj, tjs_int num) {
 					tTJSVariant var;
-					return *PropGetByNum(obj, TJS_IGNOREPROP, num, &var, obj);
+					return *PropGetByNum(sprig::get_pointer(obj), TJS_IGNOREPROP, num, &var, sprig::get_pointer(obj));
 				}
-				SPRIG_INLINE bool IsValidMember(iTJSDispatch2* obj, tjs_char const* name) {
-					return IsValid(obj, TJS_IGNOREPROP, name, 0, obj);
+				SPRIG_INLINE bool IsValidMember(sprig::krkr::tjs::object_type const& obj, tjs_char const* name) {
+					return IsValid(sprig::get_pointer(obj), TJS_IGNOREPROP, name, 0, sprig::get_pointer(obj));
 				}
-				SPRIG_INLINE void DeleteMember(iTJSDispatch2* obj, tjs_char const* name) {
-					obj->DeleteMember(0, name, 0, obj);
+				SPRIG_INLINE void DeleteMember(sprig::krkr::tjs::object_type const& obj, tjs_char const* name) {
+					obj->DeleteMember(0, name, 0, sprig::get_pointer(obj));
 				}
 		}	// namespace tjs
 	}	// namespace krkr
