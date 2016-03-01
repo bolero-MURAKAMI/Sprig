@@ -23,11 +23,22 @@ namespace sprig {
 			//
 			// as_c_str
 			//
-			SPRIG_INLINE tjs_char const* as_c_str(tTJSVariantString const* source) {
-				tjs_char const* src = source->operator tjs_char const*();
-				return src ? src
+			SPRIG_INLINE tjs_nchar const* as_c_str(tjs_nchar const* source) {
+				return source ? source
+					: SPRIG_KRKR_TJS_N("")
+					;
+			}
+			SPRIG_INLINE tjs_char const* as_c_str(tjs_char const* source) {
+				return source ? source
 					: SPRIG_KRKR_TJS_W("")
 					;
+			}
+			SPRIG_INLINE tjs_char const* as_c_str(tTJSVariantString const* source) {
+				tjs_char const* src = source->operator tjs_char const*();
+				return sprig::krkr::tjs::as_c_str(
+					source ? source->operator tjs_char const*()
+						: 0
+					);
 			}
 		}	// namespace tjs
 	}	// namespace krkr

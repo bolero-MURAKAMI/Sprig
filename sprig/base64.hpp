@@ -54,7 +54,7 @@ namespace sprig {
 			}
 			return i == static_size
 				? e_dec
-				: i
+				: static_cast<char_type>(i)
 				;
 		}
 	private:

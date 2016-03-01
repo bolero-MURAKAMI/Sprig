@@ -38,7 +38,7 @@
 #ifdef SPRIG_HAS_PRAGMA_MESSAGE
 #	pragma message("sprig/config/lib/openal.hpp")
 #	ifdef SPRIG_LIBCONFIG_OPENAL_BINARY
-#		pragma message("    lib="BOOST_PP_STRINGIZE(SPRIG_LIBCONFIG_OPENAL_BINARY))
+#		pragma message("    lib=" BOOST_PP_STRINGIZE(SPRIG_LIBCONFIG_OPENAL_BINARY))
 #	endif	// #ifdef SPRIG_LIBCONFIG_OPENAL_BINARY
 #endif	// #ifdef SPRIG_HAS_PRAGMA_MESSAGE
 

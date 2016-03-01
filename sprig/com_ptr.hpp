@@ -51,7 +51,7 @@ namespace sprig {
 			delete p;
 		}
 		template<typename U>
-		static void deleter(U** p) {
+		static void deleter_for(U** p) {
 			if (*p) {
 				com_ptr_release(*p);
 			}
@@ -82,7 +82,7 @@ namespace sprig {
 		{}
 		template<typename Derived>
 		explicit com_ptr(Derived* p, bool add_ref = false)
-			: p_(new member_element_type(p), deleter<Derived>)
+			: p_(new member_element_type(p), deleter_for<Derived>)
 		{
 			if (*p_ && add_ref) {
 				com_ptr_add_ref(*p_);

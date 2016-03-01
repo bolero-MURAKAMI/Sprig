@@ -58,7 +58,7 @@
 #ifdef SPRIG_HAS_PRAGMA_MESSAGE
 #	pragma message("sprig/config/lib/ntl.hpp")
 #	ifdef SPRIG_LIBCONFIG_NTL_BINARY
-#		pragma message("    lib="BOOST_PP_STRINGIZE(SPRIG_LIBCONFIG_NTL_BINARY))
+#		pragma message("    lib=" BOOST_PP_STRINGIZE(SPRIG_LIBCONFIG_NTL_BINARY))
 #	endif	// #ifdef SPRIG_LIBCONFIG_NTL_BINARY
 #endif	// #ifdef SPRIG_HAS_PRAGMA_MESSAGE
 

@@ -58,7 +58,7 @@
 #ifdef SPRIG_HAS_PRAGMA_MESSAGE
 #	pragma message("sprig/config/lib/bzip2.hpp")
 #	ifdef SPRIG_LIBCONFIG_BZIP2_BINARY
-#		pragma message("    lib="BOOST_PP_STRINGIZE(SPRIG_LIBCONFIG_BZIP2_BINARY))
+#		pragma message("    lib=" BOOST_PP_STRINGIZE(SPRIG_LIBCONFIG_BZIP2_BINARY))
 #	endif	// #ifdef SPRIG_LIBCONFIG_BZIP2_BINARY
 #endif	// #ifdef SPRIG_HAS_PRAGMA_MESSAGE
 

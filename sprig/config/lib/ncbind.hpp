@@ -60,7 +60,7 @@
 #ifdef SPRIG_HAS_PRAGMA_MESSAGE
 #	pragma message("sprig/config/lib/ncbind.hpp")
 #	ifdef SPRIG_LIBCONFIG_NCBIND_BINARY
-#		pragma message("    lib="BOOST_PP_STRINGIZE(SPRIG_LIBCONFIG_NCBIND_BINARY))
+#		pragma message("    lib=" BOOST_PP_STRINGIZE(SPRIG_LIBCONFIG_NCBIND_BINARY))
 #	endif	// #ifdef SPRIG_LIBCONFIG_NCBIND_BINARY
 #endif	// #ifdef SPRIG_HAS_PRAGMA_MESSAGE
 
