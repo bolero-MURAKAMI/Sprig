@@ -1,5 +1,5 @@
 /*=============================================================================
-  Copyright (c) 2010-2014 Bolero MURAKAMI
+  Copyright (c) 2010-2016 Bolero MURAKAMI
   https://github.com/bolero-MURAKAMI/Sprig
 
   Distributed under the Boost Software License, Version 1.0. (See accompanying
